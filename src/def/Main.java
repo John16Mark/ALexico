@@ -75,6 +75,7 @@ public class Main {
                 "[linea " + linea + "] Error " + posicion + ": " + mensaje
         );
         existenErrores = true;
+        
         //System.exit(1);
     }
 

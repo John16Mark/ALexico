@@ -35,13 +35,19 @@ public class Scanner {
     }
 
     public List<Token> scan() throws Exception {
-        int estado = 0;
+        int linea = 1;
+    	int estado = 0;
         String lexema = "";
         char c;
 
         for(int i=0; i<source.length(); i++){
             c = source.charAt(i);
-
+            if(c == '\n') {
+            	linea++;
+            }
+            if(Main.existenErrores) {
+            	break;
+            }
             switch (estado){
                 case 0:
                 	// Greater than / greater equal than
@@ -86,9 +92,92 @@ public class Scanner {
                         */
 
                     }
+                	// Cadena
                     else if(c == '"') {
                     	estado = 24;
                     	lexema += c;
+                    }
+                	// Comentario monolínea / slash
+                    else if(c == '/') {
+                    	estado = 26;
+                    	lexema += c;
+                    }
+                    else if(c == ',') {
+                    	lexema += c;
+                    	Token t = new Token(TipoToken.COMMA, lexema);
+                        tokens.add(t);
+                        estado = 0;
+                        lexema = "";
+                    }
+                    else if(c == '.') {
+                    	lexema += c;
+                    	Token t = new Token(TipoToken.DOT, lexema);
+                        tokens.add(t);
+                        estado = 0;
+                        lexema = "";
+                    }
+                    else if(c == ';') {
+                    	lexema += c;
+                    	Token t = new Token(TipoToken.SEMICOLON, lexema);
+                        tokens.add(t);
+                        estado = 0;
+                        lexema = "";
+                    }
+                    else if(c == '-') {
+                    	lexema += c;
+                    	Token t = new Token(TipoToken.MINUS, lexema);
+                        tokens.add(t);
+                        estado = 0;
+                        lexema = "";
+                    }
+                    else if(c == '+') {
+                    	lexema += c;
+                    	Token t = new Token(TipoToken.PLUS, lexema);
+                        tokens.add(t);
+                        estado = 0;
+                        lexema = "";
+                    }
+                    else if(c == '*') {
+                    	lexema += c;
+                    	Token t = new Token(TipoToken.STAR, lexema);
+                        tokens.add(t);
+                        estado = 0;
+                        lexema = "";
+                    }
+                    else if(c == '(') {
+                    	lexema += c;
+                    	Token t = new Token(TipoToken.LEFT_PAREN, lexema);
+                        tokens.add(t);
+                        estado = 0;
+                        lexema = "";
+                    }
+                    else if(c == ')') {
+                    	lexema += c;
+                    	Token t = new Token(TipoToken.RIGHT_PAREN, lexema);
+                        tokens.add(t);
+                        estado = 0;
+                        lexema = "";
+                    }
+                    else if(c == '{') {
+                    	lexema += c;
+                    	Token t = new Token(TipoToken.LEFT_BRACE, lexema);
+                        tokens.add(t);
+                        estado = 0;
+                        lexema = "";
+                    }
+                    else if(c == '}') {
+                    	lexema += c;
+                    	Token t = new Token(TipoToken.RIGHT_BRACE, lexema);
+                        tokens.add(t);
+                        estado = 0;
+                        lexema = "";
+                    }
+                	// Ignora los caracteres de espacio, tabulación, salto de línea, y vuelta de carro
+                    else if(c == ' ' || c == '\t' || c == '\n' || c == 13) {
+                    	
+                    }
+                    else {
+                    	Main.error(linea, "No hay Token que inicie con caracter dado");
                     }
                     break;
                     
@@ -102,6 +191,9 @@ public class Scanner {
 
                         estado = 0;
                         lexema = "";
+                        if(source.charAt(i-1) == '\n') {
+                        	linea--;
+                        }
                         i--;
                     // Operador relacional GT
                 	} else {
@@ -110,6 +202,9 @@ public class Scanner {
 
                         estado = 0;
                         lexema = "";
+                        if(source.charAt(i-1) == '\n') {
+                        	linea--;
+                        }
                         i--;
                 	}
                 	break;
@@ -124,6 +219,9 @@ public class Scanner {
 
                         estado = 0;
                         lexema = "";
+                        if(source.charAt(i-1) == '\n') {
+                        	linea--;
+                        }
                         i--;
                     // Operador relacional LT
                 	} else {
@@ -132,6 +230,9 @@ public class Scanner {
 
                         estado = 0;
                         lexema = "";
+                        if(source.charAt(i-1) == '\n') {
+                        	linea--;
+                        }
                         i--;
                 	}
                 	break;
@@ -146,6 +247,9 @@ public class Scanner {
 
                         estado = 0;
                         lexema = "";
+                        if(source.charAt(i-1) == '\n') {
+                        	linea--;
+                        }
                         i--;
                     // Asignador 
                 	} else {
@@ -154,6 +258,9 @@ public class Scanner {
 
                         estado = 0;
                         lexema = "";
+                        if(source.charAt(i-1) == '\n') {
+                        	linea--;
+                        }
                         i--;
                 	}
                 	break;
@@ -168,6 +275,9 @@ public class Scanner {
 
                         estado = 0;
                         lexema = "";
+                        if(source.charAt(i-1) == '\n') {
+                        	linea--;
+                        }
                         i--;
                     // BANG
                 	} else {
@@ -176,6 +286,9 @@ public class Scanner {
 
                         estado = 0;
                         lexema = "";
+                        if(source.charAt(i-1) == '\n') {
+                        	linea--;
+                        }
                         i--;
                 	}
                 	break;
@@ -199,6 +312,9 @@ public class Scanner {
 
                         estado = 0;
                         lexema = "";
+                        if(source.charAt(i-1) == '\n') {
+                        	linea--;
+                        }
                         i--;
 
                     }
@@ -210,10 +326,12 @@ public class Scanner {
                         lexema += c;
                     }
                     else if(c == '.'){
-
+                    	estado = 16;
+                    	lexema += c;
                     }
                     else if(c == 'E'){
-
+                    	estado = 18;
+                    	lexema += c;
                     }
                     else{
                         Token t = new Token(TipoToken.NUMBER, lexema, Integer.valueOf(lexema));
@@ -221,13 +339,83 @@ public class Scanner {
 
                         estado = 0;
                         lexema = "";
+                        if(source.charAt(i-1) == '\n') {
+                        	linea--;
+                        }
                         i--;
                     }
                     break;
                     
+                case 16:
+                	if(Character.isDigit(c)) {
+                		estado = 17;
+                		lexema += c;
+                	} else {
+                		Main.error(linea, "Se esperaba dígito después del punto decimal");
+                	}
+                	break;
+                   
+                case 17:
+                	if(Character.isDigit(c)) {
+                		lexema += c;
+                	} else if(c == 'E') {
+                		estado = 18;
+                		lexema += c;
+                	} else{
+                        Token t = new Token(TipoToken.NUMBER, lexema, Float.valueOf(lexema));
+                        tokens.add(t);
+
+                        estado = 0;
+                        lexema = "";
+                        if(source.charAt(i-1) == '\n') {
+                        	linea--;
+                        }
+                        i--;
+                    }
+                	break;
+                	
+                case 18:
+                	if(c == '+' || c == '-') {
+                		estado = 19;
+                		lexema += c;
+                	} else if(Character.isDigit(c)){
+                		estado = 20;
+                		lexema += c;
+                	} else {
+                		Main.error(linea, "Se esperaba dígito o signo después del exponente");
+                	}
+                	break;
+                	
+                case 19:
+                	if(Character.isDigit(c)) {
+                		estado = 20;
+                		lexema += c;
+                	} else {
+                		Main.error(linea, "Se esperaba dígito después del signo del exponente");
+                	}
+                	break;
+    
+                case 20:
+                	if(Character.isDigit(c)) {
+                		lexema += c;
+                	} else {
+                		Token t = new Token(TipoToken.NUMBER, lexema, Double.parseDouble(lexema));
+                        tokens.add(t);
+
+                        estado = 0;
+                        lexema = "";
+                        if(source.charAt(i-1) == '\n') {
+                        	linea--;
+                        }
+                        i--;
+                	}
+                	break;
+                	
+                /***** CADENA *****/
                 case 24:
                 	if(c == '\n') {
-                		Main.error(i, "No se esperaba salto de línea");
+                		linea--;
+                		Main.error(linea, "No se esperaba salto de línea");
                 	} else if(c == '"'){
                 		lexema += c;
                 		Token t = new Token(TipoToken.STRING, lexema, lexema.substring(1, lexema.length()-1));
@@ -238,8 +426,56 @@ public class Scanner {
                 		//i--;
                 	} else {
                 		lexema += c;
-                		estado = 24;
                 	}
+                	break;
+                	
+                case 26:
+                	// Comentario multilínea
+                	if(c == '*') {
+                		estado = 27;
+                	// Comentario monolínea
+                	} else if (c == '/') {
+                		estado = 30;
+                	// Operador división
+                	} else {
+                		lexema += c;
+                		Token t = new Token(TipoToken.SLASH, lexema);
+                        tokens.add(t);
+                		estado = 0;
+                		lexema = "";
+                		if(source.charAt(i-1) == '\n') {
+                        	linea--;
+                        }
+                		i--;
+                	}
+                	break;
+                	
+                case 27:
+                	if(c == '*') {
+                		estado = 28;
+                	}
+                	break;
+                	
+                case 28:
+                	if(c == '*') {
+
+                	// Fin comentario multilínea
+                	} else if(c == '/') {
+                		estado = 0;
+                		lexema = "";
+                	} else {
+                		estado = 27;
+                	}
+                	break;
+                	
+                case 30:
+                	// Fin comentario monolínea
+                	if(c == '\n') {
+                		estado = 0;
+                		lexema = "";
+                	} else {
+                	}
+                	
                 	break;
             }
 
