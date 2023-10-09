@@ -13,14 +13,16 @@ public class Main {
 	static boolean existenErrores = false;
 
     public static void main(String[] args) throws IOException {
-        if(args.length > 1) {
-            System.out.println("Uso correcto: interprete [archivo.txt]");
-
-            // Convención defininida en el archivo "system.h" de UNIX
-            System.exit(64);
-        } else if(args.length == 1){
-            ejecutarArchivo(args[0]);
-        } else{
+        
+    	// Ejecuta archivos si hay uno o más argumentos
+    	if(args.length != 0) {
+    		for (int i=0; i<args.length; i++) {
+    			existenErrores = false;
+    			System.out.print("\n"+args[i]+"\n\n");
+    			ejecutarArchivo(args[i]);
+    		}
+    	}
+    	else{
             ejecutarPrompt();
         }
     }
@@ -30,7 +32,7 @@ public class Main {
         ejecutar(new String(bytes, Charset.defaultCharset()));
 
         // Se indica que existe un error
-        if(existenErrores) System.exit(65);
+        //if(existenErrores) System.exit(65);
     }
 
     private static void ejecutarPrompt() throws IOException {
@@ -50,7 +52,7 @@ public class Main {
         try{
             Scanner scanner = new Scanner(source);
             List<Token> tokens = scanner.scan();
-
+            
             for(Token token : tokens){
                 System.out.println(token);
             }
