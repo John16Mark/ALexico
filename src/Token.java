@@ -1,4 +1,3 @@
-
 public class Token {
 
 	final TipoToken tipo;
@@ -18,7 +17,7 @@ public class Token {
     }
 
     public String toString() {
-        return "<" + tipo + " " + lexema + " " + literal + ">";
+        return "<\033[93m" + tipo + "\033[0m " + lexema + " " + literal + ">";
     }
     
 }

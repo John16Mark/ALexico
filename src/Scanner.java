@@ -189,10 +189,6 @@ public class Scanner {
 
                         estado = 0;
                         lexema = "";
-                        if(source.charAt(i-1) == '\n') {
-                        	linea--;
-                        }
-                        i--;
                     // Operador relacional GT
                 	} else {
                         Token t = new Token(TipoToken.GREATER, lexema);
@@ -217,10 +213,6 @@ public class Scanner {
 
                         estado = 0;
                         lexema = "";
-                        if(source.charAt(i-1) == '\n') {
-                        	linea--;
-                        }
-                        i--;
                     // Operador relacional LT
                 	} else {
                         Token t = new Token(TipoToken.LESS, lexema);
@@ -245,10 +237,6 @@ public class Scanner {
 
                         estado = 0;
                         lexema = "";
-                        if(source.charAt(i-1) == '\n') {
-                        	linea--;
-                        }
-                        i--;
                     // Asignador 
                 	} else {
                         Token t = new Token(TipoToken.EQUAL, lexema);
@@ -273,10 +261,6 @@ public class Scanner {
 
                         estado = 0;
                         lexema = "";
-                        if(source.charAt(i-1) == '\n') {
-                        	linea--;
-                        }
-                        i--;
                     // BANG
                 	} else {
                         Token t = new Token(TipoToken.BANG, lexema);
