@@ -1,2 +1,2 @@
 @echo off
-javac -d ./class src/*.java
+javac -d ./bin src/*.java
