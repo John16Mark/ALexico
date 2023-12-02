@@ -3,6 +3,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import token.TipoToken;
+import token.Token;
+
 public class Scanner {
 
     private static final Map<String, TipoToken> palabrasReservadas;
@@ -33,16 +36,12 @@ public class Scanner {
     }
 
     public List<Token> scan() throws Exception {
-        int linea = 1;
     	int estado = 0;
         String lexema = "";
         char c;
-
-        for(int i=0; i<source.length(); i++){
+        int i;
+        for(i=0; i<source.length(); i++){
             c = source.charAt(i);
-            if(c == '\n') {
-            	linea++;
-            }
             if(Main.existenErrores) {
             	break;
             }
@@ -102,70 +101,70 @@ public class Scanner {
                     }
                     else if(c == ',') {
                     	lexema += c;
-                    	Token t = new Token(TipoToken.COMMA, lexema);
+                    	Token t = new Token(TipoToken.COMMA, lexema, getLinea(i));
                         tokens.add(t);
                         estado = 0;
                         lexema = "";
                     }
                     else if(c == '.') {
                     	lexema += c;
-                    	Token t = new Token(TipoToken.DOT, lexema);
+                    	Token t = new Token(TipoToken.DOT, lexema, getLinea(i));
                         tokens.add(t);
                         estado = 0;
                         lexema = "";
                     }
                     else if(c == ';') {
                     	lexema += c;
-                    	Token t = new Token(TipoToken.SEMICOLON, lexema);
+                    	Token t = new Token(TipoToken.SEMICOLON, lexema, getLinea(i));
                         tokens.add(t);
                         estado = 0;
                         lexema = "";
                     }
                     else if(c == '-') {
                     	lexema += c;
-                    	Token t = new Token(TipoToken.MINUS, lexema);
+                    	Token t = new Token(TipoToken.MINUS, lexema, getLinea(i));
                         tokens.add(t);
                         estado = 0;
                         lexema = "";
                     }
                     else if(c == '+') {
                     	lexema += c;
-                    	Token t = new Token(TipoToken.PLUS, lexema);
+                    	Token t = new Token(TipoToken.PLUS, lexema, getLinea(i));
                         tokens.add(t);
                         estado = 0;
                         lexema = "";
                     }
                     else if(c == '*') {
                     	lexema += c;
-                    	Token t = new Token(TipoToken.STAR, lexema);
+                    	Token t = new Token(TipoToken.STAR, lexema, getLinea(i));
                         tokens.add(t);
                         estado = 0;
                         lexema = "";
                     }
                     else if(c == '(') {
                     	lexema += c;
-                    	Token t = new Token(TipoToken.LEFT_PAREN, lexema);
+                    	Token t = new Token(TipoToken.LEFT_PAREN, lexema, getLinea(i));
                         tokens.add(t);
                         estado = 0;
                         lexema = "";
                     }
                     else if(c == ')') {
                     	lexema += c;
-                    	Token t = new Token(TipoToken.RIGHT_PAREN, lexema);
+                    	Token t = new Token(TipoToken.RIGHT_PAREN, lexema, getLinea(i));
                         tokens.add(t);
                         estado = 0;
                         lexema = "";
                     }
                     else if(c == '{') {
                     	lexema += c;
-                    	Token t = new Token(TipoToken.LEFT_BRACE, lexema);
+                    	Token t = new Token(TipoToken.LEFT_BRACE, lexema, getLinea(i));
                         tokens.add(t);
                         estado = 0;
                         lexema = "";
                     }
                     else if(c == '}') {
                     	lexema += c;
-                    	Token t = new Token(TipoToken.RIGHT_BRACE, lexema);
+                    	Token t = new Token(TipoToken.RIGHT_BRACE, lexema, getLinea(i));
                         tokens.add(t);
                         estado = 0;
                         lexema = "";
@@ -175,7 +174,7 @@ public class Scanner {
                     	
                     }
                     else {
-                    	Main.error(linea, "No hay Token que inicie con caracter dado");
+                    	Main.error(getLinea(i), "No se esperaba '"+c+"'");
                     }
                     break;
                     
@@ -184,21 +183,18 @@ public class Scanner {
                 	if(c == '=') {
                 		lexema += c;
                 		
-                        Token t = new Token(TipoToken.GREATER_EQUAL, lexema);
+                        Token t = new Token(TipoToken.GREATER_EQUAL, lexema, getLinea(i));
                         tokens.add(t);
 
                         estado = 0;
                         lexema = "";
                     // Operador relacional GT
                 	} else {
-                        Token t = new Token(TipoToken.GREATER, lexema);
+                        Token t = new Token(TipoToken.GREATER, lexema, getLinea(i));
                         tokens.add(t);
 
                         estado = 0;
                         lexema = "";
-                        if(source.charAt(i-1) == '\n') {
-                        	linea--;
-                        }
                         i--;
                 	}
                 	break;
@@ -208,21 +204,18 @@ public class Scanner {
                 	if(c == '=') {
                 		lexema += c;
                 		
-                        Token t = new Token(TipoToken.LESS_EQUAL, lexema);
+                        Token t = new Token(TipoToken.LESS_EQUAL, lexema, getLinea(i));
                         tokens.add(t);
 
                         estado = 0;
                         lexema = "";
                     // Operador relacional LT
                 	} else {
-                        Token t = new Token(TipoToken.LESS, lexema);
+                        Token t = new Token(TipoToken.LESS, lexema, getLinea(i));
                         tokens.add(t);
 
                         estado = 0;
                         lexema = "";
-                        if(source.charAt(i-1) == '\n') {
-                        	linea--;
-                        }
                         i--;
                 	}
                 	break;
@@ -232,21 +225,18 @@ public class Scanner {
                 	if(c == '=') {
                 		lexema += c;
                 		
-                        Token t = new Token(TipoToken.EQUAL_EQUAL, lexema);
+                        Token t = new Token(TipoToken.EQUAL_EQUAL, lexema, getLinea(i));
                         tokens.add(t);
 
                         estado = 0;
                         lexema = "";
                     // Asignador 
                 	} else {
-                        Token t = new Token(TipoToken.EQUAL, lexema);
+                        Token t = new Token(TipoToken.EQUAL, lexema, getLinea(i));
                         tokens.add(t);
 
                         estado = 0;
                         lexema = "";
-                        if(source.charAt(i-1) == '\n') {
-                        	linea--;
-                        }
                         i--;
                 	}
                 	break;
@@ -256,21 +246,18 @@ public class Scanner {
                 	if(c == '=') {
                 		lexema += c;
                 		
-                        Token t = new Token(TipoToken.BANG_EQUAL, lexema);
+                        Token t = new Token(TipoToken.BANG_EQUAL, lexema, getLinea(i));
                         tokens.add(t);
 
                         estado = 0;
                         lexema = "";
                     // BANG
                 	} else {
-                        Token t = new Token(TipoToken.BANG, lexema);
+                        Token t = new Token(TipoToken.BANG, lexema, getLinea(i));
                         tokens.add(t);
 
                         estado = 0;
                         lexema = "";
-                        if(source.charAt(i-1) == '\n') {
-                        	linea--;
-                        }
                         i--;
                 	}
                 	break;
@@ -284,19 +271,15 @@ public class Scanner {
                         TipoToken tt = palabrasReservadas.get(lexema);
 
                         if(tt == null){
-                            Token t = new Token(TipoToken.IDENTIFIER, lexema);
+                            Token t = new Token(TipoToken.IDENTIFIER, lexema, getLinea(i));
                             tokens.add(t);
                         }
                         else{
-                            Token t = new Token(tt, lexema);
+                            Token t = new Token(tt, lexema, getLinea(i));
                             tokens.add(t);
                         }
-
                         estado = 0;
                         lexema = "";
-                        if(source.charAt(i-1) == '\n') {
-                        	linea--;
-                        }
                         i--;
 
                     }
@@ -316,14 +299,11 @@ public class Scanner {
                     	lexema += c;
                     }
                     else{
-                        Token t = new Token(TipoToken.NUMBER, lexema, Integer.valueOf(lexema));
+                        Token t = new Token(TipoToken.NUMBER, lexema, Integer.valueOf(lexema), getLinea(i));
                         tokens.add(t);
 
                         estado = 0;
                         lexema = "";
-                        if(source.charAt(i-1) == '\n') {
-                        	linea--;
-                        }
                         i--;
                     }
                     break;
@@ -333,7 +313,7 @@ public class Scanner {
                 		estado = 17;
                 		lexema += c;
                 	} else {
-                		Main.error(linea, "Se esperaba dígito después del punto decimal");
+                		Main.error(getLinea(i), "Se esperaba dígito después del punto decimal");
                 	}
                 	break;
                    
@@ -344,14 +324,11 @@ public class Scanner {
                 		estado = 18;
                 		lexema += c;
                 	} else{
-                        Token t = new Token(TipoToken.NUMBER, lexema, Float.valueOf(lexema));
+                        Token t = new Token(TipoToken.NUMBER, lexema, Float.valueOf(lexema), getLinea(i));
                         tokens.add(t);
 
                         estado = 0;
                         lexema = "";
-                        if(source.charAt(i-1) == '\n') {
-                        	linea--;
-                        }
                         i--;
                     }
                 	break;
@@ -364,7 +341,7 @@ public class Scanner {
                 		estado = 20;
                 		lexema += c;
                 	} else {
-                		Main.error(linea, "Se esperaba dígito o signo después del exponente");
+                		Main.error(getLinea(i), "Se esperaba dígito o signo después del exponente");
                 	}
                 	break;
                 	
@@ -373,7 +350,7 @@ public class Scanner {
                 		estado = 20;
                 		lexema += c;
                 	} else {
-                		Main.error(linea, "Se esperaba dígito después del signo del exponente");
+                		Main.error(getLinea(i), "Se esperaba dígito después del signo del exponente");
                 	}
                 	break;
     
@@ -381,14 +358,11 @@ public class Scanner {
                 	if(Character.isDigit(c)) {
                 		lexema += c;
                 	} else {
-                		Token t = new Token(TipoToken.NUMBER, lexema, Double.parseDouble(lexema));
+                		Token t = new Token(TipoToken.NUMBER, lexema, Double.parseDouble(lexema), getLinea(i));
                         tokens.add(t);
 
                         estado = 0;
                         lexema = "";
-                        if(source.charAt(i-1) == '\n') {
-                        	linea--;
-                        }
                         i--;
                 	}
                 	break;
@@ -396,16 +370,14 @@ public class Scanner {
                 /***** CADENA *****/
                 case 24:
                 	if(c == '\n') {
-                		linea--;
-                		Main.error(linea, "No se esperaba salto de línea");
+                		Main.error(getLinea(i), "No se esperaba salto de línea");
                 	} else if(c == '"'){
                 		lexema += c;
-                		Token t = new Token(TipoToken.STRING, lexema, lexema.substring(1, lexema.length()-1));
+                		Token t = new Token(TipoToken.STRING, lexema, lexema.substring(1, lexema.length()-1), getLinea(i));
                         tokens.add(t);
                         
                 		estado = 0;
                 		lexema = "";
-                		//i--;
                 	} else {
                 		lexema += c;
                 	}
@@ -421,13 +393,10 @@ public class Scanner {
                 	// Operador división
                 	} else {
                 		lexema += c;
-                		Token t = new Token(TipoToken.SLASH, lexema);
+                		Token t = new Token(TipoToken.SLASH, lexema, getLinea(i));
                         tokens.add(t);
                 		estado = 0;
                 		lexema = "";
-                		if(source.charAt(i-1) == '\n') {
-                        	linea--;
-                        }
                 		i--;
                 	}
                 	break;
@@ -464,7 +433,17 @@ public class Scanner {
 
         }
 
-
+        tokens.add(new Token(TipoToken.EOF, "", getLinea(i)));
         return tokens;
+    }
+
+    private int getLinea(int pos){
+        int j=1;
+        for(int i=0; i<pos; i++){
+            if(source.charAt(i) == '\n'){
+                j++;
+            }
+        }
+        return j;
     }
 }

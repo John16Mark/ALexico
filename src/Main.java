@@ -6,21 +6,21 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.List;
 
+import token.Token;
+
 public class Main {
 	// Cambio de prueba yty ewwea
 	static boolean existenErrores = false;
 
     public static void main(String[] args) throws IOException {
-        
-    	// Ejecuta archivos si hay uno o más argumentos
-    	if(args.length != 0) {
-    		for (int i=0; i<args.length; i++) {
-    			existenErrores = false;
-    			System.out.print("\n"+args[i]+"\n\n");
-    			ejecutarArchivo(args[i]);
-    		}
-    	}
-    	else{
+        if(args.length > 1) {
+            System.out.println("Uso correcto: interprete [archivo.txt]");
+            // Convención defininida en el archivo "system.h" de UNIX
+            System.exit(64);
+        } else if(args.length == 1){
+            System.out.print("\n"+args[0]+"\n\n");
+            ejecutarArchivo(args[0]);
+        } else{
             ejecutarPrompt();
         }
     }
@@ -52,7 +52,7 @@ public class Main {
             List<Token> tokens = scanner.scan();
             
             for(Token token : tokens){
-                System.out.println(token);
+                System.out.println(token.imprimir());
             }
         }
         catch (Exception ex){
@@ -72,11 +72,14 @@ public class Main {
 
     private static void reportar(int linea, String posicion, String mensaje){
         System.err.println(
-                "[linea " + linea + "] Error " + posicion + ": " + mensaje
+                "\033[91m[linea " + linea + "] Error " + posicion + ":\033[0m " + mensaje
         );
         existenErrores = true;
-        
         //System.exit(1);
+    }
+
+    private static void presentacion(){
+        
     }
 
 }

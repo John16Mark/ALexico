@@ -1,3 +1,5 @@
+package token;
+
 public enum TipoToken {
     // Tokens de un sólo caracter
     LEFT_PAREN, RIGHT_PAREN, LEFT_BRACE, RIGHT_BRACE,
