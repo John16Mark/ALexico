@@ -7,6 +7,7 @@ import java.nio.file.Paths;
 import java.util.List;
 
 import token.Token;
+import parser.*;
 
 public class Main {
 	// Cambio de prueba yty ewwea
@@ -54,6 +55,9 @@ public class Main {
             for(Token token : tokens){
                 System.out.println(token.imprimir());
             }
+   
+            Parser parser = new ASDR(tokens);
+            parser.parse();
         }
         catch (Exception ex){
             ex.printStackTrace();
