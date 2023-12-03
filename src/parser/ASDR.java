@@ -2,6 +2,7 @@ package parser;
 
 import java.util.List;
 
+import def.Main;
 import token.TipoToken;
 import token.Token;
 
@@ -23,7 +24,7 @@ public class ASDR implements Parser{
         PROGRAM();
 
         if(preanalisis.getTipo() == TipoToken.EOF && !hayErrores){
-            System.out.println("\033[94mAnálisis Sintáctico Correcto\033[0m");
+            System.out.println("\033[94mAnálisis Sintáctico Correcto\033[0m\n");
             return  true;
         }else {
             System.out.println("\033[91mSe encontraron errores\033[0m");
@@ -117,8 +118,7 @@ public class ASDR implements Parser{
         } else if(pre == TipoToken.LEFT_BRACE){
             BLOCK();
         } else {
-            hayErrores = true;
-            System.out.println("Se esperaba inicio de sentencia");
+            error(preanalisis.getLinea(), "Se esperaba inicio de sentencia");
         }
     }
 
@@ -159,8 +159,7 @@ public class ASDR implements Parser{
         } else if(pre == TipoToken.SEMICOLON){
             match(TipoToken.SEMICOLON);
         } else {
-            hayErrores = true;
-            System.out.println("Se esperaba inicio de sentencia");
+            error(preanalisis.getLinea(), "Se esperaba inicio de sentencia");
         }
     }
 
@@ -177,8 +176,7 @@ public class ASDR implements Parser{
         } else if(pre == TipoToken.SEMICOLON){
             match(TipoToken.SEMICOLON);
         } else {
-            hayErrores = true;
-            System.out.println("Se esperaba inicio de sentencia");
+            error(preanalisis.getLinea(), "Se esperaba inicio de sentencia");
         }
     }
 
@@ -469,8 +467,7 @@ public class ASDR implements Parser{
         } else if(pre == TipoToken.TRUE || pre == TipoToken.FALSE || pre == TipoToken.NULL || pre == TipoToken.NUMBER || pre == TipoToken.STRING || pre == TipoToken.IDENTIFIER || pre == TipoToken.LEFT_PAREN){
             CALL();
         } else {
-            hayErrores = true;
-            System.out.println("\033[91mError: [Línea "+preanalisis.getLinea()+"] Se esperaba '!', '-', o PRIMARY\033[0m");
+            error(preanalisis.getLinea(), "Se esperaba '!', '-', o PRIMARY");
         }
     }
 
@@ -518,8 +515,7 @@ public class ASDR implements Parser{
             EXPRESSION();
             match(TipoToken.RIGHT_PAREN);
         } else {
-            hayErrores = true;
-            System.out.println("Se esperaba PRIMARY");
+            error(preanalisis.getLinea(), "Se esperaba PRIMARY");
         }
     }
 
@@ -613,8 +609,14 @@ public class ASDR implements Parser{
             preanalisis = tokens.get(i);
         }
         else{
-            hayErrores = true;
-            System.out.println("Error encontrado: Se esperaba "+TipoToken.imprimir(tt));
+            error(preanalisis.getLinea(), "Error encontrado: Se esperaba "+TipoToken.imprimir(tt));
         }
     }
+
+    void error(int linea, String mensaje){
+        hayErrores = true;
+        System.out.println("\033[91mAnálisis Sintáctico Incorrecto\033[0m");
+        Main.reportar(linea, mensaje);
+    }
+
 }

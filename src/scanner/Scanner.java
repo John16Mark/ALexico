@@ -11,7 +11,6 @@ import token.Token;
 public class Scanner {
 
     private static final Map<String, TipoToken> palabrasReservadas;
-
     static {
         palabrasReservadas = new HashMap<>();
         palabrasReservadas.put("and",    TipoToken.AND);
@@ -32,6 +31,7 @@ public class Scanner {
     private final String source;
 
     private final List<Token> tokens = new ArrayList<>();
+    public boolean hayErrores = false;
     
     public Scanner(String source){
         this.source = source + " ";
@@ -78,18 +78,6 @@ public class Scanner {
                     else if(Character.isDigit(c)){
                         estado = 15;
                         lexema += c;
-
-                        /*while(Character.isDigit(c)){
-                            lexema += c;
-                            i++;
-                            c = source.charAt(i);
-                        }
-                        Token t = new Token(TipoToken.NUMBER, lexema, Integer.valueOf(lexema));
-                        lexema = "";
-                        estado = 0;
-                        tokens.add(t);
-                        */
-
                     }
                 	// Cadena
                     else if(c == '"') {
@@ -176,7 +164,7 @@ public class Scanner {
                     	
                     }
                     else {
-                    	Main.error(getLinea(i), "No se esperaba '"+c+"'");
+                    	error(getLinea(i), "No se esperaba '"+c+"'");
                     }
                     break;
                     
@@ -315,7 +303,7 @@ public class Scanner {
                 		estado = 17;
                 		lexema += c;
                 	} else {
-                		Main.error(getLinea(i), "Se esperaba dígito después del punto decimal");
+                		error(getLinea(i), "Se esperaba dígito después del punto decimal");
                 	}
                 	break;
                    
@@ -343,7 +331,7 @@ public class Scanner {
                 		estado = 20;
                 		lexema += c;
                 	} else {
-                		Main.error(getLinea(i), "Se esperaba dígito o signo después del exponente");
+                		error(getLinea(i), "Se esperaba dígito o signo después del exponente");
                 	}
                 	break;
                 	
@@ -352,7 +340,7 @@ public class Scanner {
                 		estado = 20;
                 		lexema += c;
                 	} else {
-                		Main.error(getLinea(i), "Se esperaba dígito después del signo del exponente");
+                		error(getLinea(i), "Se esperaba dígito después del signo del exponente");
                 	}
                 	break;
     
@@ -372,7 +360,7 @@ public class Scanner {
                 /***** CADENA *****/
                 case 24:
                 	if(c == '\n') {
-                		Main.error(getLinea(i), "No se esperaba salto de línea");
+                		error(getLinea(i), "No se esperaba salto de línea");
                 	} else if(c == '"'){
                 		lexema += c;
                 		Token t = new Token(TipoToken.STRING, lexema, lexema.substring(1, lexema.length()-1), getLinea(i));
@@ -436,6 +424,7 @@ public class Scanner {
         }
 
         tokens.add(new Token(TipoToken.EOF, "", getLinea(i)));
+        System.out.println("\033[94mAnálisis Léxico Correcto\033[0m");
         return tokens;
     }
 
@@ -447,5 +436,11 @@ public class Scanner {
             }
         }
         return j;
+    }
+
+    private void error(int linea, String mensaje){
+        hayErrores = true;
+        System.out.println("\033[91mAnálisis Léxico Incorrecto\033[0m");
+        Main.reportar(linea, mensaje);
     }
 }

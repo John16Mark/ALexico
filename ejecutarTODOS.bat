@@ -1,4 +1,5 @@
 @echo off
+cls
 java -cp bin def.Main ./pruebas/Prueba1.txt
 java -cp bin def.Main ./pruebas/Prueba2.txt
 java -cp bin def.Main ./pruebas/Prueba3.txt

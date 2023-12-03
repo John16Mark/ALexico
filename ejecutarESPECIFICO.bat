@@ -1,5 +1,5 @@
 @echo off
-
+cls
 REM Verifica si se proporciona al menos un argumento
 if "%1"=="" (
     echo Debes proporcionar un argumento.

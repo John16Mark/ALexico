@@ -12,8 +12,9 @@ import parser.*;
 import scanner.Scanner;
 
 public class Main {
-	// Cambio de prueba yty ewwea
+
 	public static boolean existenErrores = false;
+    static boolean debug = false;
 
     public static void main(String[] args) throws IOException {
         if(args.length > 1) {
@@ -21,7 +22,7 @@ public class Main {
             // Convención defininida en el archivo "system.h" de UNIX
             System.exit(64);
         } else if(args.length == 1){
-            System.out.print("\n"+args[0]+"\n\n");
+            System.out.print(""+args[0]+"\n\n");
             ejecutarArchivo(args[0]);
         } else{
             ejecutarPrompt();
@@ -54,10 +55,12 @@ public class Main {
             Scanner scanner = new Scanner(source);
             List<Token> tokens = scanner.scan();
             
-            for(Token token : tokens){
-                System.out.println(token.imprimir());
+            if(debug) {
+                for(Token token : tokens){
+                    System.out.println(token.imprimir());
+                }
             }
-   
+            
             Parser parser = new ASDR(tokens);
             parser.parse();
         }
@@ -84,8 +87,16 @@ public class Main {
         System.exit(1);
     }
 
-    private static void presentacion(){
-        
+    public static void reportar(int linea, String mensaje){
+        System.out.println(
+                "\033[91m [línea \033[31m" + linea + "\033[91m] Error: " + mensaje + "\033[0m\n"
+        );
+        existenErrores = true;
+        System.exit(1);
     }
+
+    /*private static void presentacion(){
+        
+    }*/
 
 }
