@@ -24,7 +24,7 @@ public class ASDR implements Parser{
         PROGRAM();
 
         if(preanalisis.getTipo() == TipoToken.EOF && !hayErrores){
-            System.out.println("\033[94mAnálisis Sintáctico Correcto\033[0m\n");
+            System.out.println("\033[94mAnálisis Sintáctico Correcto\033[0m");
             return  true;
         }else {
             System.out.println("\033[91mSe encontraron errores\033[0m");
@@ -609,7 +609,7 @@ public class ASDR implements Parser{
             preanalisis = tokens.get(i);
         }
         else{
-            error(preanalisis.getLinea(), "Error encontrado: Se esperaba "+TipoToken.imprimir(tt));
+            error(preanalisis.getLinea(), "Se esperaba "+TipoToken.imprimir(tt));
         }
     }
 

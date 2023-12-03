@@ -22,7 +22,7 @@ public class Main {
             // Convención defininida en el archivo "system.h" de UNIX
             System.exit(64);
         } else if(args.length == 1){
-            System.out.print(""+args[0]+"\n\n");
+            System.out.print("\n"+args[0]+"\n\n");
             ejecutarArchivo(args[0]);
         } else{
             ejecutarPrompt();
@@ -89,7 +89,7 @@ public class Main {
 
     public static void reportar(int linea, String mensaje){
         System.out.println(
-                "\033[91m [línea \033[31m" + linea + "\033[91m] Error: " + mensaje + "\033[0m\n"
+                "\033[91m [línea \033[31m" + linea + "\033[91m] Error: " + mensaje + "\033[0m"
         );
         existenErrores = true;
         System.exit(1);
