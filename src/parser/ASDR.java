@@ -23,10 +23,10 @@ public class ASDR implements Parser{
         PROGRAM();
 
         if(preanalisis.getTipo() == TipoToken.EOF && !hayErrores){
-            System.out.println("Análisis Sintáctico Correcto");
+            System.out.println("\033[94mAnálisis Sintáctico Correcto\033[0m");
             return  true;
         }else {
-            System.out.println("Se encontraron errores");
+            System.out.println("\033[91mSe encontraron errores\033[0m");
         }
         return false;
     }
@@ -470,7 +470,7 @@ public class ASDR implements Parser{
             CALL();
         } else {
             hayErrores = true;
-            System.out.println("Se esperaba '!', '-', o PRIMARY");
+            System.out.println("\033[91mError: [Línea "+preanalisis.getLinea()+"] Se esperaba '!', '-', o PRIMARY\033[0m");
         }
     }
 
@@ -540,7 +540,7 @@ public class ASDR implements Parser{
     }
 
     // FUNCTIONS -> FUN_DECL FUNCTIONS | Ɛ
-    private void FUNCTIONS(){
+    /*private void FUNCTIONS(){
         if(hayErrores)
             return;
 
@@ -548,7 +548,7 @@ public class ASDR implements Parser{
             FUN_DECL();
             FUNCTIONS();
         }
-    }
+    }*/
 
     // PARAMETERS_OPC -> PARAMETERS | Ɛ
     private void PARAMETERS_OPC(){
@@ -614,7 +614,7 @@ public class ASDR implements Parser{
         }
         else{
             hayErrores = true;
-            System.out.println("Error encontrado");
+            System.out.println("Error encontrado: Se esperaba "+TipoToken.imprimir(tt));
         }
     }
 }

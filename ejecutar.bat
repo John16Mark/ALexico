@@ -1,2 +1,2 @@
 @echo off
-java -cp bin Main
+java -cp bin def.Main

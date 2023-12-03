@@ -1,3 +1,4 @@
+package def;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -8,10 +9,11 @@ import java.util.List;
 
 import token.Token;
 import parser.*;
+import scanner.Scanner;
 
 public class Main {
 	// Cambio de prueba yty ewwea
-	static boolean existenErrores = false;
+	public static boolean existenErrores = false;
 
     public static void main(String[] args) throws IOException {
         if(args.length > 1) {
@@ -70,16 +72,16 @@ public class Main {
     para reportar los errores:
     Interprete.error(....);
      */
-    static void error(int linea, String mensaje){
+    public static void error(int linea, String mensaje){
         reportar(linea, "", mensaje);
     }
 
-    private static void reportar(int linea, String posicion, String mensaje){
-        System.err.println(
-                "\033[91m[linea " + linea + "] Error " + posicion + ":\033[0m " + mensaje
+    public static void reportar(int linea, String posicion, String mensaje){
+        System.out.println(
+                "\033[91m[linea " + linea + "] Error " + posicion + ": " + mensaje + "\033[0m"
         );
         existenErrores = true;
-        //System.exit(1);
+        System.exit(1);
     }
 
     private static void presentacion(){

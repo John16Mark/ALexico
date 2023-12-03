@@ -9,6 +9,6 @@ if "%1"=="" (
 REM Concatena el argumento a la cadena "./pruebas/"
 set "ruta=./pruebas/%1"
 
-java -cp bin Main %ruta%
+java -cp bin def.Main %ruta%
 
 :fin
