@@ -61,7 +61,7 @@ public class Main {
                 }
             }
             
-            Parser parser = new ASDR(tokens);
+            Parser parser = new ParserArbol(tokens);
             parser.parse();
         }
         catch (Exception ex){

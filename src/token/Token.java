@@ -37,6 +37,10 @@ public class Token {
     	return tipo;
     }
 
+    public String getLexema() {
+    	return lexema;
+    }
+
     public Object getLiteral() {
     	return literal;
     }

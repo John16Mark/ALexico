@@ -6,14 +6,14 @@ import def.Main;
 import token.TipoToken;
 import token.Token;
 
-public class ASDR implements Parser{
+public class ParserASDR implements Parser{
 
     private int i = 0;
     private boolean hayErrores = false;
     private Token preanalisis;
     private final List<Token> tokens;
 
-    public ASDR(List<Token> tokens){
+    public ParserASDR(List<Token> tokens){
         this.tokens = tokens;
         preanalisis = this.tokens.get(i);
     }
