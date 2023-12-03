@@ -25,9 +25,16 @@ public class ParserArbol implements Parser{
     public boolean parse() {
         // Inicia el analizador léxico
         Nodo nodo = PROGRAM();
-        nodo.imprimir(0);
+        ArrayList<Boolean> lista = new ArrayList<>();
         if(preanalisis.getTipo() == TipoToken.EOF && !hayErrores){
+            if(def.Main.debug){
+                System.out.print("\n");
+            }
             System.out.println("\033[94mAnálisis Sintáctico Correcto\033[0m");
+            if(def.Main.debug){
+                System.out.println("\n\033[92m  Árbol Sintáctico\033[0m");
+                nodo.imprimir(0, lista);
+            }
             return  true;
         }else {
             System.out.println("\033[91mSe encontraron errores\033[0m");
@@ -87,7 +94,7 @@ public class ParserArbol implements Parser{
     private Nodo FUN_DECL(){
         ArrayList<Object> aux = new ArrayList<>();
 
-        aux.add(preanalisis);match(TipoToken.FUN);
+        match(TipoToken.FUN);           aux.add(previous());
         Nodo nodo = FUNCTION();         aux.add(nodo);
         return new Nodo(aux, "FUN_DECL");
     }
@@ -96,10 +103,10 @@ public class ParserArbol implements Parser{
     private Nodo VAR_DECL(){
         ArrayList<Object> aux = new ArrayList<>();
 
-        aux.add(preanalisis);match(TipoToken.VAR);
-        aux.add(preanalisis);match(TipoToken.IDENTIFIER);
-        Nodo nodo = VAR_INIT();     aux.add(nodo);
-        aux.add(preanalisis);match(TipoToken.SEMICOLON);
+        match(TipoToken.VAR);           aux.add(previous());
+        match(TipoToken.IDENTIFIER);    aux.add(previous());
+        Nodo nodo = VAR_INIT();         aux.add(nodo);
+        match(TipoToken.SEMICOLON);     aux.add(previous());
         return new Nodo(aux, "VAR_DECL");
     }
 
@@ -108,8 +115,8 @@ public class ParserArbol implements Parser{
         ArrayList<Object> aux = new ArrayList<>();
 
         if(preanalisis. getTipo() == TipoToken.EQUAL){
-            aux.add(preanalisis);match(TipoToken.EQUAL);
-            Nodo naux = EXPRESSION();aux.add(naux);
+            match(TipoToken.EQUAL);         aux.add(previous());
+            Nodo naux = EXPRESSION();       aux.add(naux);
         }
         return new Nodo(aux, "VAR_INIT");
     }
@@ -162,8 +169,8 @@ public class ParserArbol implements Parser{
     private Nodo EXPR_STMT(){
         ArrayList<Object> aux = new ArrayList<>();
         
-        Nodo naux = EXPRESSION();   aux.add(naux);
-        aux.add(preanalisis);       match(TipoToken.SEMICOLON);
+        Nodo naux = EXPRESSION();       aux.add(naux);
+        match(TipoToken.SEMICOLON);     aux.add(previous());
         return new Nodo(aux, "EXPR_STMT");
     }
 
@@ -171,13 +178,13 @@ public class ParserArbol implements Parser{
     private Nodo FOR_STMT(){
         ArrayList<Object> aux = new ArrayList<>();
         Nodo nodo;
-        aux.add(preanalisis);match(TipoToken.FOR);
-        aux.add(preanalisis);match(TipoToken.LEFT_PAREN);
-        nodo = FOR_STMT_1();       aux.add(nodo);
-        nodo = FOR_STMT_2();       aux.add(nodo);
-        nodo = FOR_STMT_3();       aux.add(nodo);
-        aux.add(preanalisis);match(TipoToken.RIGHT_PAREN);
-        nodo = STATEMENT();        aux.add(nodo);
+        match(TipoToken.FOR);           aux.add(previous());
+        match(TipoToken.LEFT_PAREN);    aux.add(previous());
+        nodo = FOR_STMT_1();            aux.add(nodo);
+        nodo = FOR_STMT_2();            aux.add(nodo);
+        nodo = FOR_STMT_3();            aux.add(nodo);
+        match(TipoToken.RIGHT_PAREN);   aux.add(previous());
+        nodo = STATEMENT();             aux.add(nodo);
         return new Nodo(aux, "FOR_STMT");
     }
 
@@ -187,7 +194,7 @@ public class ParserArbol implements Parser{
         Nodo nodo;
         switch (preanalisis.getTipo()) {
             case TipoToken.VAR:
-                nodo = VAR_DECL();      aux.add(nodo);
+                nodo = VAR_DECL();              aux.add(nodo);
                 return new Nodo(aux, "FOR_STMT_1");
             case TipoToken.BANG:
             case TipoToken.MINUS:
@@ -198,10 +205,10 @@ public class ParserArbol implements Parser{
             case TipoToken.STRING:
             case TipoToken.IDENTIFIER:
             case TipoToken.LEFT_PAREN:
-                nodo = EXPR_STMT();     aux.add(nodo);
+                nodo = EXPR_STMT();             aux.add(nodo);
                 return new Nodo(aux, "FOR_STMT_1");
             case TipoToken.SEMICOLON:
-                aux.add(preanalisis);   match(TipoToken.SEMICOLON);
+                match(TipoToken.SEMICOLON);     aux.add(previous());
                 return new Nodo(aux, "FOR_STMT_1");
             default:
                 error(preanalisis.getLinea(), "Se esperaba inicio de sentencia");
@@ -223,11 +230,11 @@ public class ParserArbol implements Parser{
             case TipoToken.STRING:
             case TipoToken.IDENTIFIER:
             case TipoToken.LEFT_PAREN:
-                Nodo naux = EXPRESSION();   aux.add(naux);
-                aux.add(preanalisis);       match(TipoToken.SEMICOLON);
+                Nodo naux = EXPRESSION();       aux.add(naux);
+                match(TipoToken.SEMICOLON);     aux.add(previous());
                 return new Nodo(aux, "FOR_STMT_2");
             case TipoToken.SEMICOLON:
-                aux.add(preanalisis);       match(TipoToken.SEMICOLON);
+                match(TipoToken.SEMICOLON);     aux.add(previous());
                 return new Nodo(aux, "FOR_STMT_2");
             default:
                 error(preanalisis.getLinea(), "Se esperaba inicio de sentencia");
@@ -249,7 +256,7 @@ public class ParserArbol implements Parser{
             case TipoToken.STRING:
             case TipoToken.IDENTIFIER:
             case TipoToken.LEFT_PAREN:
-                Nodo naux = EXPRESSION();aux.add(naux);
+                Nodo naux = EXPRESSION();       aux.add(naux);
                 break;
             default:
                 break;
@@ -261,12 +268,12 @@ public class ParserArbol implements Parser{
     private Nodo IF_STMT(){
         ArrayList<Object> aux = new ArrayList<>();
 
-        aux.add(preanalisis);match(TipoToken.IF);
-        aux.add(preanalisis);match(TipoToken.LEFT_PAREN);
-        Nodo nodo = EXPRESSION();   aux.add(nodo);
-        aux.add(preanalisis);match(TipoToken.RIGHT_PAREN);
-        nodo = STATEMENT();         aux.add(nodo);
-        nodo = ELSE_STMT();         aux.add(nodo);
+        match(TipoToken.IF);            aux.add(previous());
+        match(TipoToken.LEFT_PAREN);    aux.add(previous());
+        Nodo nodo = EXPRESSION();       aux.add(nodo);
+        match(TipoToken.RIGHT_PAREN);   aux.add(previous());
+        nodo = STATEMENT();             aux.add(nodo);
+        nodo = ELSE_STMT();             aux.add(nodo);
         return new Nodo(aux, "IF_STMT");
     }
 
@@ -275,7 +282,7 @@ public class ParserArbol implements Parser{
         ArrayList<Object> aux = new ArrayList<>();
         
         if(preanalisis.getTipo() == TipoToken.ELSE){
-            aux.add(preanalisis);match(TipoToken.ELSE);
+            match(TipoToken.ELSE);      aux.add(previous());
             Nodo nodo = STATEMENT();    aux.add(nodo);
         }
         return new Nodo(aux, "ELSE_STMT");
@@ -285,9 +292,9 @@ public class ParserArbol implements Parser{
     private Nodo PRINT_STMT(){
         ArrayList<Object> aux = new ArrayList<>();
 
-        aux.add(preanalisis);match(TipoToken.PRINT);
-        Nodo naux = EXPRESSION();aux.add(naux);
-        aux.add(preanalisis);match(TipoToken.SEMICOLON);
+        match(TipoToken.PRINT);         aux.add(previous());
+        Nodo naux = EXPRESSION();       aux.add(naux);
+        match(TipoToken.SEMICOLON);     aux.add(previous());
         return new Nodo(aux, "PRINT_STMT");
     }
 
@@ -295,9 +302,9 @@ public class ParserArbol implements Parser{
     private Nodo RETURN_STMT(){
         ArrayList<Object> aux = new ArrayList<>();
 
-        aux.add(preanalisis);match(TipoToken.RETURN);
+        match(TipoToken.RETURN);            aux.add(previous());
         Nodo naux = RETURN_EXP_OPC();       aux.add(naux);
-        aux.add(preanalisis);match(TipoToken.SEMICOLON);
+        match(TipoToken.SEMICOLON);         aux.add(previous());
         return new Nodo(aux, "RETURN_STMT");
     }
 
@@ -327,11 +334,11 @@ public class ParserArbol implements Parser{
     private Nodo WHILE_STMT(){
         ArrayList<Object> aux = new ArrayList<>();
 
-        aux.add(preanalisis);match(TipoToken.WHILE);
-        aux.add(preanalisis);match(TipoToken.LEFT_PAREN);
-        Nodo nodo = EXPRESSION();   aux.add(nodo);
-        aux.add(preanalisis);match(TipoToken.RIGHT_PAREN);
-        nodo = STATEMENT();         aux.add(nodo);
+        match(TipoToken.WHILE);         aux.add(previous());
+        match(TipoToken.LEFT_PAREN);    aux.add(previous());
+        Nodo nodo = EXPRESSION();       aux.add(nodo);
+        match(TipoToken.RIGHT_PAREN);   aux.add(previous());
+        nodo = STATEMENT();             aux.add(nodo);
         return new Nodo(aux, "WHILE_STMT");
     }
 
@@ -339,9 +346,9 @@ public class ParserArbol implements Parser{
     private Nodo BLOCK(){
         ArrayList<Object> aux = new ArrayList<>();
         Nodo nodo;
-        aux.add(preanalisis);match(TipoToken.LEFT_BRACE);
-        nodo = DECLARATION();      aux.add(nodo);
-        aux.add(preanalisis);match(TipoToken.RIGHT_BRACE);
+        match(TipoToken.LEFT_BRACE);    aux.add(previous());
+        nodo = DECLARATION();           aux.add(nodo);
+        match(TipoToken.RIGHT_BRACE);   aux.add(previous());
         return new Nodo(aux, "BLOCK");
     }
 
@@ -371,8 +378,8 @@ public class ParserArbol implements Parser{
         ArrayList<Object> aux = new ArrayList<>();
 
         if(preanalisis.getTipo() == TipoToken.EQUAL){
-            aux.add(preanalisis);match(TipoToken.EQUAL);
-            Nodo naux = EXPRESSION();aux.add(naux);
+            match(TipoToken.EQUAL);     aux.add(previous());
+            Nodo naux = EXPRESSION();   aux.add(naux);
         }
         return new Nodo(aux, "ASSIGNMENT_OPC");
     }
@@ -391,7 +398,7 @@ public class ParserArbol implements Parser{
         ArrayList<Object> aux = new ArrayList<>();
         Nodo nodo;
         if(preanalisis.getTipo() == TipoToken.OR){
-            aux.add(preanalisis);match(TipoToken.OR);
+            match(TipoToken.OR);    aux.add(previous());
             nodo = LOGIC_AND();     aux.add(nodo);
             nodo = LOGIC_OR_2();    aux.add(nodo);
         }
@@ -412,9 +419,9 @@ public class ParserArbol implements Parser{
         ArrayList<Object> aux = new ArrayList<>();
         Nodo nodo;
         if(preanalisis.getTipo() == TipoToken.AND){
-            aux.add(preanalisis);match(TipoToken.AND);
-            nodo = EQUALITY();      aux.add(nodo);
-            nodo = LOGIC_AND_2();   aux.add(nodo);
+            match(TipoToken.AND);       aux.add(previous());
+            nodo = EQUALITY();          aux.add(nodo);
+            nodo = LOGIC_AND_2();       aux.add(nodo);
         }
         return new Nodo(aux, "LOGIC_AND_2");
     }
@@ -433,13 +440,13 @@ public class ParserArbol implements Parser{
         ArrayList<Object> aux = new ArrayList<>();
         Nodo nodo;
         if(preanalisis.getTipo() == TipoToken.BANG_EQUAL){
-            aux.add(preanalisis);match(TipoToken.BANG_EQUAL);
-            nodo = COMPARISON();    aux.add(nodo);
-            nodo = EQUALITY_2();    aux.add(nodo);
+            match(TipoToken.BANG_EQUAL);    aux.add(previous());
+            nodo = COMPARISON();            aux.add(nodo);
+            nodo = EQUALITY_2();            aux.add(nodo);
         } else if(preanalisis.getTipo() == TipoToken.EQUAL_EQUAL) {
-            aux.add(preanalisis);match(TipoToken.EQUAL_EQUAL);
-            nodo = COMPARISON();    aux.add(nodo);
-            nodo = EQUALITY_2();    aux.add(nodo);
+            match(TipoToken.EQUAL_EQUAL);   aux.add(previous());
+            nodo = COMPARISON();            aux.add(nodo);
+            nodo = EQUALITY_2();            aux.add(nodo);
         }
         return new Nodo(aux, "EQUALITY_2");
     }
@@ -458,21 +465,21 @@ public class ParserArbol implements Parser{
         ArrayList<Object> aux = new ArrayList<>();
         Nodo nodo;
         if(preanalisis.getTipo() == TipoToken.GREATER){
-            aux.add(preanalisis);match(TipoToken.GREATER);
-            nodo = TERM();          aux.add(nodo);
-            nodo = COMPARISON_2();  aux.add(nodo);
+            match(TipoToken.GREATER);           aux.add(previous());
+            nodo = TERM();                      aux.add(nodo);
+            nodo = COMPARISON_2();              aux.add(nodo);
         } else if(preanalisis.getTipo() == TipoToken.GREATER_EQUAL){
-            aux.add(preanalisis);match(TipoToken.GREATER_EQUAL);
-            nodo = TERM();          aux.add(nodo);
-            nodo = COMPARISON_2();  aux.add(nodo);
+            match(TipoToken.GREATER_EQUAL);     aux.add(previous());
+            nodo = TERM();                      aux.add(nodo);
+            nodo = COMPARISON_2();              aux.add(nodo);
         } else if(preanalisis.getTipo() == TipoToken.LESS){
-            aux.add(preanalisis);match(TipoToken.LESS);
-            nodo = TERM();          aux.add(nodo);
-            nodo = COMPARISON_2();  aux.add(nodo);
+            match(TipoToken.LESS);              aux.add(previous());
+            nodo = TERM();                      aux.add(nodo);
+            nodo = COMPARISON_2();              aux.add(nodo);
         } else if(preanalisis.getTipo() == TipoToken.LESS_EQUAL){
-            aux.add(preanalisis);match(TipoToken.LESS_EQUAL);
-            nodo = TERM();          aux.add(nodo);
-            nodo = COMPARISON_2();  aux.add(nodo);
+            match(TipoToken.LESS_EQUAL);        aux.add(previous());
+            nodo = TERM();                      aux.add(nodo);
+            nodo = COMPARISON_2();              aux.add(nodo);
         }
         return new Nodo(aux, "COMPARISON_2");
     }
@@ -491,13 +498,13 @@ public class ParserArbol implements Parser{
         ArrayList<Object> aux = new ArrayList<>();
         Nodo naux;
         if(preanalisis.getTipo() == TipoToken.MINUS){
-            aux.add(preanalisis);match(TipoToken.MINUS);
-            naux = FACTOR();    aux.add(naux);
-            naux = TERM_2();    aux.add(naux);
+            match(TipoToken.MINUS);     aux.add(previous());
+            naux = FACTOR();            aux.add(naux);
+            naux = TERM_2();            aux.add(naux);
         } else if(preanalisis.getTipo() == TipoToken.PLUS){
-            aux.add(preanalisis);match(TipoToken.PLUS);
-            naux = FACTOR();    aux.add(naux);
-            naux = TERM_2();    aux.add(naux);
+            match(TipoToken.PLUS);      aux.add(previous());
+            naux = FACTOR();            aux.add(naux);
+            naux = TERM_2();            aux.add(naux);
         }
         return new Nodo(aux, "TERM_2");
     }
@@ -516,11 +523,11 @@ public class ParserArbol implements Parser{
         ArrayList<Object> aux = new ArrayList<>();
         Nodo naux;
         if(preanalisis.getTipo() == TipoToken.SLASH){
-            aux.add(preanalisis);   match(TipoToken.SLASH);
+            match(TipoToken.SLASH); aux.add(previous());
             naux = UNARY();         aux.add(naux);
             naux = FACTOR_2();      aux.add(naux);
         } else if(preanalisis.getTipo() == TipoToken.STAR){
-            aux.add(preanalisis);   match(TipoToken.STAR);
+            match(TipoToken.STAR);  aux.add(previous());
             naux = UNARY();         aux.add(naux);
             naux = FACTOR_2();      aux.add(naux);
         }
@@ -533,12 +540,12 @@ public class ParserArbol implements Parser{
         Nodo naux;
         switch (preanalisis.getTipo()) {
             case TipoToken.BANG:
-                aux.add(preanalisis);match(TipoToken.BANG);
-                naux = UNARY();aux.add(naux);
+                match(TipoToken.BANG);      aux.add(previous());
+                naux = UNARY();             aux.add(naux);
                 return new Nodo(aux, "UNARY");
             case TipoToken.MINUS:
-                aux.add(preanalisis);match(TipoToken.MINUS);
-                naux = UNARY();aux.add(naux);
+                match(TipoToken.MINUS);     aux.add(previous());
+                naux = UNARY();             aux.add(naux);
                 return new Nodo(aux, "UNARY");
             case TipoToken.TRUE:
             case TipoToken.FALSE:
@@ -547,7 +554,7 @@ public class ParserArbol implements Parser{
             case TipoToken.STRING:
             case TipoToken.IDENTIFIER:
             case TipoToken.LEFT_PAREN:
-                naux = CALL();aux.add(naux);
+                naux = CALL();              aux.add(naux);
                 return new Nodo(aux, "UNARY");
             default:
                 error(preanalisis.getLinea(), "Se esperaba '!', '-', o PRIMARY");
@@ -560,8 +567,8 @@ public class ParserArbol implements Parser{
     private Nodo CALL(){
         ArrayList<Object> aux = new ArrayList<>();
         
-        Nodo naux = PRIMARY();  aux.add(naux);
-        naux = CALL_2();        aux.add(naux);
+        Nodo naux = PRIMARY();      aux.add(naux);
+        naux = CALL_2();            aux.add(naux);
         return new Nodo(aux, "CALL");
     }
 
@@ -570,9 +577,9 @@ public class ParserArbol implements Parser{
         ArrayList<Object> aux = new ArrayList<>();
 
         if(preanalisis.getTipo() == TipoToken.LEFT_PAREN){
-            aux.add(preanalisis);match(TipoToken.LEFT_PAREN);
+            match(TipoToken.LEFT_PAREN);    aux.add(previous());
             Nodo naux = ARGUMENTS_OPC();    aux.add(naux);
-            aux.add(preanalisis);match(TipoToken.RIGHT_PAREN);
+            match(TipoToken.RIGHT_PAREN);   aux.add(previous());
             naux = CALL_2();                aux.add(naux);
         }
         return new Nodo(aux, "CALL_2");
@@ -583,27 +590,27 @@ public class ParserArbol implements Parser{
         ArrayList<Object> aux = new ArrayList<>();
 
         if(preanalisis.getTipo() == TipoToken.TRUE){
-            aux.add(preanalisis);   match(TipoToken.TRUE);
+            match(TipoToken.TRUE);          aux.add(previous());
             return new Nodo(aux, "PRIMARY");
         } else if(preanalisis.getTipo() == TipoToken.FALSE){
-            aux.add(preanalisis);match(TipoToken.FALSE);
+            match(TipoToken.FALSE);         aux.add(previous());
             return new Nodo(aux, "PRIMARY");
         } else if(preanalisis.getTipo() == TipoToken.NULL){
-            aux.add(preanalisis);match(TipoToken.NULL);
+            match(TipoToken.NULL);          aux.add(previous());
             return new Nodo(aux, "PRIMARY");
         } else if(preanalisis.getTipo() == TipoToken.NUMBER){
-            aux.add(preanalisis);match(TipoToken.NUMBER);
+            match(TipoToken.NUMBER);        aux.add(previous());
             return new Nodo(aux, "PRIMARY");
         } else if(preanalisis.getTipo() == TipoToken.STRING){
-            aux.add(preanalisis);match(TipoToken.STRING);
+            match(TipoToken.STRING);        aux.add(previous());
             return new Nodo(aux, "PRIMARY");
         } else if(preanalisis.getTipo() == TipoToken.IDENTIFIER){
-            aux.add(preanalisis);match(TipoToken.IDENTIFIER);
+            match(TipoToken.IDENTIFIER);    aux.add(previous());
             return new Nodo(aux, "PRIMARY");
         } else if(preanalisis.getTipo() == TipoToken.LEFT_PAREN){
-            aux.add(preanalisis);match(TipoToken.LEFT_PAREN);
-            Nodo naux = EXPRESSION();aux.add(naux);
-            aux.add(preanalisis);match(TipoToken.RIGHT_PAREN);
+            match(TipoToken.LEFT_PAREN);    aux.add(previous());
+            Nodo naux = EXPRESSION();       aux.add(naux);
+            match(TipoToken.RIGHT_PAREN);   aux.add(previous());
             return new Nodo(aux, "PRIMARY");
         } else {
             error(preanalisis.getLinea(), "Se esperaba PRIMARY");
@@ -619,11 +626,11 @@ public class ParserArbol implements Parser{
     private Nodo FUNCTION(){
         ArrayList<Object> aux = new ArrayList<>();
 
-        aux.add(preanalisis);match(TipoToken.IDENTIFIER);
-        aux.add(preanalisis);match(TipoToken.LEFT_PAREN);
-        Nodo naux = PARAMETERS_OPC();aux.add(naux);
-        aux.add(preanalisis);match(TipoToken.RIGHT_PAREN);
-        naux = BLOCK();aux.add(naux);
+        match(TipoToken.IDENTIFIER);        aux.add(previous());
+        match(TipoToken.LEFT_PAREN);        aux.add(previous());
+        Nodo naux = PARAMETERS_OPC();       aux.add(naux);
+        match(TipoToken.RIGHT_PAREN);       aux.add(previous());
+        naux = BLOCK();                     aux.add(naux);
         return new Nodo(aux, "FUNCTION");
     }
 
@@ -643,7 +650,7 @@ public class ParserArbol implements Parser{
         ArrayList<Object> aux = new ArrayList<>();
 
         if(preanalisis.getTipo() == TipoToken.IDENTIFIER){
-            Nodo naux = PARAMETERS();aux.add(naux);
+            Nodo naux = PARAMETERS();       aux.add(naux);
         }
         return new Nodo(aux, "PARAMETERS_OPC");
     }
@@ -652,8 +659,8 @@ public class ParserArbol implements Parser{
     private Nodo PARAMETERS(){
         ArrayList<Object> aux = new ArrayList<>();
 
-        aux.add(preanalisis);match(TipoToken.IDENTIFIER);
-        Nodo naux = PARAMETERS_2();aux.add(naux);
+        match(TipoToken.IDENTIFIER);        aux.add(previous());
+        Nodo naux = PARAMETERS_2();         aux.add(naux);
         return new Nodo(aux, "PARAMETERS");
     }
 
@@ -662,9 +669,9 @@ public class ParserArbol implements Parser{
         ArrayList<Object> aux = new ArrayList<>();
 
         if(preanalisis.getTipo() == TipoToken.COMMA){
-            aux.add(preanalisis);match(TipoToken.COMMA);
-            aux.add(preanalisis);match(TipoToken.IDENTIFIER);
-            Nodo naux = PARAMETERS_2();aux.add(naux);
+            match(TipoToken.COMMA);         aux.add(previous());
+            match(TipoToken.IDENTIFIER);    aux.add(previous());
+            Nodo naux = PARAMETERS_2();     aux.add(naux);
         }
         return new Nodo(aux, "PARAMETERS_2");
     }
@@ -676,8 +683,8 @@ public class ParserArbol implements Parser{
         TipoToken pre = preanalisis.getTipo();
         if(pre == TipoToken.BANG || pre == TipoToken.MINUS
         || pre == TipoToken.TRUE || pre == TipoToken.FALSE || pre == TipoToken.NULL || pre == TipoToken.NUMBER || pre == TipoToken.STRING || pre == TipoToken.IDENTIFIER || pre == TipoToken.LEFT_PAREN){
-            Nodo naux = EXPRESSION();aux.add(naux);
-            naux = ARGUMENTS();aux.add(naux);
+            Nodo naux = EXPRESSION();       aux.add(naux);
+            naux = ARGUMENTS();             aux.add(naux);
         }
         return new Nodo(aux, "ARGUMENTS_OPC");
     }
@@ -687,9 +694,9 @@ public class ParserArbol implements Parser{
         ArrayList<Object> aux = new ArrayList<>();
 
         if(preanalisis.getTipo() == TipoToken.COMMA){
-            aux.add(preanalisis);match(TipoToken.COMMA);
-            Nodo naux = EXPRESSION();aux.add(naux);
-            naux = ARGUMENTS();aux.add(naux);
+            match(TipoToken.COMMA);         aux.add(previous());
+            Nodo naux = EXPRESSION();       aux.add(naux);
+            naux = ARGUMENTS();             aux.add(naux);
         }
         return new Nodo(aux, "ARGUMENTS");
     }
@@ -711,4 +718,7 @@ public class ParserArbol implements Parser{
         Main.reportar(linea, mensaje);
     }
 
+    private Token previous() {
+        return this.tokens.get(i - 1);
+    }
 }

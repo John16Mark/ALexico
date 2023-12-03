@@ -14,7 +14,7 @@ import scanner.Scanner;
 public class Main {
 
 	public static boolean existenErrores = false;
-    static boolean debug = false;
+    public static boolean debug = false;
 
     public static void main(String[] args) throws IOException {
         if(args.length > 1) {
@@ -56,6 +56,7 @@ public class Main {
             List<Token> tokens = scanner.scan();
             
             if(debug) {
+                System.out.println("\n\033[92m  Lista de Tokens\033[0m");
                 for(Token token : tokens){
                     System.out.println(token.imprimir());
                 }
