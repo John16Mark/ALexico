@@ -46,18 +46,36 @@ public class ASDR implements Parser{
         if(hayErrores)
             return;
 
-        TipoToken pre = preanalisis.getTipo();
-        if(pre == TipoToken.FUN){
-            FUN_DECL();
-            DECLARATION();
-        } else if(pre == TipoToken.VAR){
-            VAR_DECL();
-            DECLARATION();
-        } else if(pre == TipoToken.BANG || pre == TipoToken.MINUS
-        || pre == TipoToken.TRUE || pre == TipoToken.FALSE || pre == TipoToken.NULL || pre == TipoToken.NUMBER || pre == TipoToken.STRING || pre == TipoToken.IDENTIFIER || pre == TipoToken.LEFT_PAREN
-        || pre == TipoToken.FOR || pre == TipoToken.IF || pre == TipoToken.PRINT || pre == TipoToken.RETURN || pre == TipoToken.WHILE || pre == TipoToken.LEFT_BRACE){
-            STATEMENT();
-            DECLARATION();
+        switch (preanalisis.getTipo()) {
+            case TipoToken.FUN:
+                FUN_DECL();
+                DECLARATION();
+                break;
+            case TipoToken.VAR:
+                VAR_DECL();
+                DECLARATION();
+                break;
+            case TipoToken.BANG:
+            case TipoToken.MINUS:
+            case TipoToken.TRUE:
+            case TipoToken.FALSE:
+            case TipoToken.NULL:
+            case TipoToken.NUMBER:
+            case TipoToken.STRING:
+            case TipoToken.IDENTIFIER:
+            case TipoToken.LEFT_PAREN:
+            case TipoToken.FOR:
+            case TipoToken.IF:
+            case TipoToken.PRINT:
+            case TipoToken.RETURN:
+            case TipoToken.WHILE:
+            case TipoToken.LEFT_BRACE:
+                STATEMENT();
+                DECLARATION();
+                break;
+        
+            default:
+                break;
         }
     }
 
@@ -101,24 +119,39 @@ public class ASDR implements Parser{
         if(hayErrores)
             return;
 
-        TipoToken pre = preanalisis.getTipo();
-        if(pre == TipoToken.BANG || pre == TipoToken.MINUS
-        || pre == TipoToken.TRUE || pre == TipoToken.FALSE || pre == TipoToken.NULL || pre == TipoToken.NUMBER || pre == TipoToken.STRING || pre == TipoToken.IDENTIFIER || pre == TipoToken.LEFT_PAREN){
-            EXPR_STMT();
-        } else if(pre == TipoToken.FOR){
-            FOR_STMT();
-        } else if(pre == TipoToken.IF){
-            IF_STMT();
-        } else if(pre == TipoToken.PRINT){
-            PRINT_STMT();
-        } else if(pre == TipoToken.RETURN){
-            RETURN_STMT();
-        } else if(pre == TipoToken.WHILE){
-            WHILE_STMT();
-        } else if(pre == TipoToken.LEFT_BRACE){
-            BLOCK();
-        } else {
-            error(preanalisis.getLinea(), "Se esperaba inicio de sentencia");
+        switch (preanalisis.getTipo()) {
+            case TipoToken.BANG:
+            case TipoToken.MINUS:
+            case TipoToken.TRUE:
+            case TipoToken.FALSE:
+            case TipoToken.NULL:
+            case TipoToken.NUMBER:
+            case TipoToken.STRING:
+            case TipoToken.IDENTIFIER:
+            case TipoToken.LEFT_PAREN:
+                EXPR_STMT();
+                break;
+            case TipoToken.FOR:
+                FOR_STMT();
+                break;
+            case TipoToken.IF:
+                IF_STMT();
+                break;
+            case TipoToken.PRINT:
+                PRINT_STMT();
+                break;
+            case TipoToken.RETURN:
+                RETURN_STMT();
+                break;
+            case TipoToken.WHILE:
+                WHILE_STMT();
+                break;
+            case TipoToken.LEFT_BRACE:
+                BLOCK();
+                break;
+            default:
+                error(preanalisis.getLinea(), "Se esperaba inicio de sentencia");
+                break;
         }
     }
 
@@ -150,16 +183,27 @@ public class ASDR implements Parser{
         if(hayErrores)
             return;
 
-        TipoToken pre = preanalisis.getTipo();
-        if(pre == TipoToken.VAR){
-            VAR_DECL();
-        } else if(pre == TipoToken.BANG || pre == TipoToken.MINUS
-        || pre == TipoToken.TRUE || pre == TipoToken.FALSE || pre == TipoToken.NULL || pre == TipoToken.NUMBER || pre == TipoToken.STRING || pre == TipoToken.IDENTIFIER || pre == TipoToken.LEFT_PAREN){
-            EXPR_STMT();
-        } else if(pre == TipoToken.SEMICOLON){
-            match(TipoToken.SEMICOLON);
-        } else {
-            error(preanalisis.getLinea(), "Se esperaba inicio de sentencia");
+        switch (preanalisis.getTipo()) {
+            case TipoToken.VAR:
+                VAR_DECL();
+                break;
+            case TipoToken.BANG:
+            case TipoToken.MINUS:
+            case TipoToken.TRUE:
+            case TipoToken.FALSE:
+            case TipoToken.NULL:
+            case TipoToken.NUMBER:
+            case TipoToken.STRING:
+            case TipoToken.IDENTIFIER:
+            case TipoToken.LEFT_PAREN:
+                EXPR_STMT();
+                break;
+            case TipoToken.SEMICOLON:
+                match(TipoToken.SEMICOLON);
+                break;
+            default:
+                error(preanalisis.getLinea(), "Se esperaba inicio de sentencia");
+                break;
         }
     }
 
@@ -168,15 +212,25 @@ public class ASDR implements Parser{
         if(hayErrores)
             return;
 
-        TipoToken pre = preanalisis.getTipo();
-        if(pre == TipoToken.BANG || pre == TipoToken.MINUS
-        || pre == TipoToken.TRUE || pre == TipoToken.FALSE || pre == TipoToken.NULL || pre == TipoToken.NUMBER || pre == TipoToken.STRING || pre == TipoToken.IDENTIFIER || pre == TipoToken.LEFT_PAREN){
-            EXPRESSION();
-            match(TipoToken.SEMICOLON);
-        } else if(pre == TipoToken.SEMICOLON){
-            match(TipoToken.SEMICOLON);
-        } else {
-            error(preanalisis.getLinea(), "Se esperaba inicio de sentencia");
+        switch (preanalisis.getTipo()) {
+            case TipoToken.BANG:
+            case TipoToken.MINUS:
+            case TipoToken.TRUE:
+            case TipoToken.FALSE:
+            case TipoToken.NULL:
+            case TipoToken.NUMBER:
+            case TipoToken.STRING:
+            case TipoToken.IDENTIFIER:
+            case TipoToken.LEFT_PAREN:
+                EXPRESSION();
+                match(TipoToken.SEMICOLON);
+                break;
+            case TipoToken.SEMICOLON:
+                match(TipoToken.SEMICOLON);
+                break;
+            default:
+                error(preanalisis.getLinea(), "Se esperaba inicio de sentencia");
+                break;
         }
     }
 
@@ -185,10 +239,20 @@ public class ASDR implements Parser{
         if(hayErrores)
             return;
 
-        TipoToken pre = preanalisis.getTipo();
-        if(pre == TipoToken.BANG || pre == TipoToken.MINUS
-        || pre == TipoToken.TRUE || pre == TipoToken.FALSE || pre == TipoToken.NULL || pre == TipoToken.NUMBER || pre == TipoToken.STRING || pre == TipoToken.IDENTIFIER || pre == TipoToken.LEFT_PAREN){
-            EXPRESSION();
+        switch (preanalisis.getTipo()) {
+            case TipoToken.BANG:
+            case TipoToken.MINUS:
+            case TipoToken.TRUE:
+            case TipoToken.FALSE:
+            case TipoToken.NULL:
+            case TipoToken.NUMBER:
+            case TipoToken.STRING:
+            case TipoToken.IDENTIFIER:
+            case TipoToken.LEFT_PAREN:
+                EXPRESSION();
+                break;
+            default:
+                break;
         }
     }
 
@@ -241,10 +305,20 @@ public class ASDR implements Parser{
         if(hayErrores)
             return;
 
-        TipoToken pre = preanalisis.getTipo();
-        if(pre == TipoToken.BANG || pre == TipoToken.MINUS
-        || pre == TipoToken.TRUE || pre == TipoToken.FALSE || pre == TipoToken.NULL || pre == TipoToken.NUMBER || pre == TipoToken.STRING || pre == TipoToken.IDENTIFIER || pre == TipoToken.LEFT_PAREN){
-            EXPRESSION();
+        switch (preanalisis.getTipo()) {
+            case TipoToken.BANG:
+            case TipoToken.MINUS:
+            case TipoToken.TRUE:
+            case TipoToken.FALSE:
+            case TipoToken.NULL:
+            case TipoToken.NUMBER:
+            case TipoToken.STRING:
+            case TipoToken.IDENTIFIER:
+            case TipoToken.LEFT_PAREN:
+                EXPRESSION();
+                break;
+            default:
+                break;
         }
     }
 
@@ -457,17 +531,27 @@ public class ASDR implements Parser{
         if(hayErrores)
             return;
         
-        TipoToken pre = preanalisis.getTipo();
-        if(pre == TipoToken.BANG){
-            match(TipoToken.BANG);
-            UNARY();
-        } else if(pre == TipoToken.MINUS){
-            match(TipoToken.MINUS);
-            UNARY();
-        } else if(pre == TipoToken.TRUE || pre == TipoToken.FALSE || pre == TipoToken.NULL || pre == TipoToken.NUMBER || pre == TipoToken.STRING || pre == TipoToken.IDENTIFIER || pre == TipoToken.LEFT_PAREN){
-            CALL();
-        } else {
-            error(preanalisis.getLinea(), "Se esperaba '!', '-', o PRIMARY");
+        switch (preanalisis.getTipo()) {
+            case TipoToken.BANG:
+                match(TipoToken.BANG);
+                UNARY();
+                break;
+            case TipoToken.MINUS:
+                match(TipoToken.MINUS);
+                UNARY();
+                break;
+            case TipoToken.TRUE:
+            case TipoToken.FALSE:
+            case TipoToken.NULL:
+            case TipoToken.NUMBER:
+            case TipoToken.STRING:
+            case TipoToken.IDENTIFIER:
+            case TipoToken.LEFT_PAREN:
+                CALL();
+                break;
+            default:
+                error(preanalisis.getLinea(), "Se esperaba '!', '-', o PRIMARY");
+                break;
         }
     }
 
