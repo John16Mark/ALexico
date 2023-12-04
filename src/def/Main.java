@@ -14,7 +14,7 @@ import scanner.Scanner;
 public class Main {
 
 	public static boolean existenErrores = false;
-    public static boolean debug = false;
+    public static boolean debug = true;
 
     public static void main(String[] args) throws IOException {
         if(args.length > 1) {
@@ -62,7 +62,7 @@ public class Main {
                 }
             }
             
-            Parser parser = new ParserArbol(tokens);
+            Parser parser = new ParserASA(tokens);
             parser.parse();
         }
         catch (Exception ex){

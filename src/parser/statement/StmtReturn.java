@@ -4,8 +4,9 @@ import parser.expression.Expression;
 
 public class StmtReturn extends Statement {
     final Expression value;
+    public final static String nombre = "StmtReturn";
 
-    StmtReturn(Expression value) {
+    public StmtReturn(Expression value) {
         this.value = value;
     }
 }

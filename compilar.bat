@@ -1,2 +1,2 @@
 @echo off
-javac -d ./bin src/token/*.java src/parser/*.java src/scanner/*.java src/parser/arbol/*.java src/def/*.java
+javac -d ./bin src/token/*.java src/parser/*.java src/scanner/*.java src/parser/arbol/*.java src/parser/expression/*.java src/parser/statement/*.java src/def/*.java

@@ -1,9 +1,10 @@
 package parser.expression;
 
-class ExprLiteral extends Expression {
+public class ExprLiteral extends Expression {
     final Object value;
+    public final static String nombre = "ExprLiteral";
 
-    ExprLiteral(Object value) {
+    public ExprLiteral(Object value) {
         this.value = value;
     }
 }
