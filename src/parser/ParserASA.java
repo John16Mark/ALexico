@@ -102,8 +102,8 @@ public class ParserASA implements Parser{
         Token id = previous();
         Expression expr = VAR_INIT();
         match(TipoToken.SEMICOLON);
-        ExprAssign expa = new ExprAssign(id, expr);
-        return new StmtExpression(expa);
+        StmtVar stmtv = new StmtVar(id, expr);
+        return stmtv;
     }
 
     // VAR_INIT -> = EXPRESSION
@@ -497,7 +497,6 @@ public class ParserASA implements Parser{
             Expression expr2 = UNARY();
             ExprBinary expb = new ExprBinary(expr, operador, expr2);
             return FACTOR_2(expb);
-
         }
         return expr;
     }

@@ -6,7 +6,6 @@ import parser.Program;
 
 public class ExprLiteral extends Expression {
     final Object value;
-    public final static String nombre = "ExprLiteral";
 
     public ExprLiteral(Object value) {
         this.value = value;
@@ -26,7 +25,11 @@ public class ExprLiteral extends Expression {
                 }
             }
         }
-        System.out.print("\033[95m"+value+"\n");System.out.print("\033[0m");
+        if(value instanceof String){
+            System.out.print("\033[95m\""+value+"\"\n");System.out.print("\033[0m");
+        } else {
+            System.out.print("\033[95m"+value+"\n");System.out.print("\033[0m");
+        }
         lista.remove(lista.size()-1);
     }
 }
