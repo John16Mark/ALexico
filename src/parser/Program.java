@@ -39,10 +39,6 @@ public class Program {
                     }
                 }
             }
-
-            if(nombre == null){
-                System.out.print("\033[91m");
-            }
             System.out.print(getNombreStatement(hijo)+"\n");System.out.print("\033[0m");
             hijo.imprimir(nivel+1, lista);
 

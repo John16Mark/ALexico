@@ -33,7 +33,7 @@ public class ParserASA implements Parser{
             }
             System.out.println("\033[94mAnálisis Sintáctico Correcto\033[0m");
             if(def.Main.debug){
-                System.out.println("\n\033[92m  Árbol Sintáctico\033[0m");
+                System.out.println("\n\033[92m  Árbol de Sintaxis Abstracta\033[0m");
                 p.imprimir(0, lista);
             }
             return  true;
