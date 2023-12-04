@@ -1,5 +1,8 @@
 package parser.statement;
 
+import java.util.ArrayList;
+
+import parser.Program;
 import parser.expression.Expression;
 
 public class StmtIf extends Statement {
@@ -12,5 +15,61 @@ public class StmtIf extends Statement {
         this.condition = condition;
         this.thenBranch = thenBranch;
         this.elseBranch = elseBranch;
+    }
+
+    @Override
+    public void imprimir(int nivel, ArrayList<Boolean> lista){
+        /// CONDITION
+        lista.add(true);
+        for(int j=0; j<(lista.size()); j++){
+            if(j == lista.size()-1){
+                System.out.print(" ├─");
+            } else {
+                if(lista.get(j)){
+                    System.out.print(" │ ");
+                } else {
+                    System.out.print("   ");
+                }
+            }
+        }
+        System.out.print(Program.getNombreExpression(condition)+"\n");System.out.print("\033[0m");
+        condition.imprimir(nivel+1, lista);
+        lista.remove(lista.size()-1);
+        /// THEN
+        lista.add(true);
+        for(int j=0; j<(lista.size()); j++){
+            if(j == lista.size()-1){
+                System.out.print(" ├─");
+            } else {
+                if(lista.get(j)){
+                    System.out.print(" │ ");
+                } else {
+                    System.out.print("   ");
+                }
+            }
+        }
+        System.out.print(Program.getNombreStatement(thenBranch)+"\n");System.out.print("\033[0m");
+        thenBranch.imprimir(nivel+1, lista);
+        lista.remove(lista.size()-1);
+        /// CONDITION
+        lista.add(false);
+        for(int j=0; j<(lista.size()); j++){
+            if(j == lista.size()-1){
+                System.out.print(" └─");
+            } else {
+                if(lista.get(j)){
+                    System.out.print(" │ ");
+                } else {
+                    System.out.print("   ");
+                }
+            }
+        }
+        if(elseBranch != null) {
+            System.out.print(Program.getNombreStatement(elseBranch)+"\n");System.out.print("\033[0m");
+            elseBranch.imprimir(nivel+1, lista);
+        } else {
+            System.out.print("\033[31mnull\n");System.out.print("\033[0m");
+        }
+        lista.remove(lista.size()-1);
     }
 }

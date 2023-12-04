@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import javax.swing.plaf.nimbus.State;
-
 import def.Main;
 import parser.expression.*;
 import parser.statement.*;
@@ -28,6 +26,7 @@ public class ParserASA implements Parser{
     public boolean parse() {
         // Inicia el analizador léxico
         Program p = PROGRAM();
+        ArrayList<Boolean> lista = new ArrayList<>();
         if(preanalisis.getTipo() == TipoToken.EOF && !hayErrores){
             if(def.Main.debug){
                 System.out.print("\n");
@@ -35,7 +34,7 @@ public class ParserASA implements Parser{
             System.out.println("\033[94mAnálisis Sintáctico Correcto\033[0m");
             if(def.Main.debug){
                 System.out.println("\n\033[92m  Árbol Sintáctico\033[0m");
-                //nodo.imprimir(0, lista);
+                p.imprimir(0, lista);
             }
             return  true;
         }else {
@@ -63,6 +62,7 @@ public class ParserASA implements Parser{
                 return DECLARATION(lista);
             case TipoToken.VAR:
                 stmt = VAR_DECL();
+                lista.add(stmt);
                 return DECLARATION(lista);
             case TipoToken.BANG:
             case TipoToken.MINUS:
@@ -80,6 +80,7 @@ public class ParserASA implements Parser{
             case TipoToken.WHILE:
             case TipoToken.LEFT_BRACE:
                 stmt = STATEMENT();
+                lista.add(stmt);
                 return DECLARATION(lista);
             default:
                 break;
@@ -328,7 +329,7 @@ public class ParserASA implements Parser{
     // EXPRESSION -> ASSIGNMENT
     private Expression EXPRESSION(){
         Expression expr = ASSIGNMENT();
-        return new ExprGrouping(expr);
+        return expr;
     }
 
     // ASIGNMENT -> LOGIC_OR ASSIGNMENT_OPC
