@@ -11,6 +11,10 @@ public class ExprVariable extends Expression {
         this.name = name;
     }
 
+    public Token getName(){
+        return name;
+    }
+
     @Override
     public void imprimir(int nivel, ArrayList<Boolean> lista){
         lista.add(false);

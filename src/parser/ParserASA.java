@@ -168,12 +168,30 @@ public class ParserASA implements Parser{
     private Statement FOR_STMT(){
         match(TipoToken.FOR);
         match(TipoToken.LEFT_PAREN);
-        Statement stmt = FOR_STMT_1();
+        Statement decl = FOR_STMT_1();
         Expression condition = FOR_STMT_2();
-        Expression expr = FOR_STMT_3();
+        Expression assign = FOR_STMT_3();
         match(TipoToken.RIGHT_PAREN);
         Statement body = STATEMENT();
-        return new StmtFor(stmt, condition, expr, body);
+
+        if(condition == null){
+            condition = new ExprLiteral(true);
+        }
+
+        if(assign != null){
+            body = new StmtBlock(Arrays.asList(body, new StmtExpression(assign)));
+        }
+
+        StmtLoop stmtloop = new StmtLoop(condition, body);
+
+        if(decl != null){
+            StmtBlock block = new StmtBlock(Arrays.asList(decl, stmtloop));
+            return block;
+        } else {
+            return stmtloop;
+        }
+
+        //return new StmtFor(decl, condition, assign, body);
     }
 
     // FOR_STMT_1 -> VAR_DECL | EXPR_STMT | ;
@@ -345,8 +363,12 @@ public class ParserASA implements Parser{
             match(TipoToken.EQUAL);
             Token operador = previous();
             Expression expr2 = EXPRESSION();
-            ExprBinary expb = new ExprBinary(expr, operador, expr2);
-            return expb;
+            if(expr instanceof ExprVariable){
+                ExprAssign expa = new ExprAssign(((ExprVariable)expr).getName(), expr2);
+                return expa;
+            } else {
+                error(operador.getLinea(), "Asignación inválida");
+            }
         }
         return expr;
     }

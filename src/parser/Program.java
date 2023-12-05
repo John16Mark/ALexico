@@ -56,9 +56,6 @@ public class Program {
         if(s instanceof StmtExpression){
             return "StmtExpression";
         }
-        if(s instanceof StmtFor){
-            return "StmtFor";
-        }
         if(s instanceof StmtFunction){
             return "StmtFunction";
         }
