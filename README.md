@@ -2,7 +2,6 @@
 
 ### Compiladores 5CM1
 Lenguaje: Java<br>
-IDE utilizado: Eclipse Java<br>
 Autor: Juan M.<br>
 
 Scanner basado en el código proporcionado por el profesor.<br>
@@ -52,10 +51,10 @@ Tokens de uno o dos caracteres:
 |*|!|!=|=|==|
 |>|>=|<|<=||
 
-Literales válidas de números:
+Literales válidas de números:<br>
 <img src="https://i.imgur.com/8nLHKME.png">
 
-Literales válidas de identificadores:
+Literales válidas de identificadores:<br>
 <img src="https://i.imgur.com/Jefymr2.png">
 
 El Scanner acepta también literales cadena.
@@ -69,4 +68,4 @@ El paquete `parser` cuenta con tres analizadores sintácticos:<br>
 <b><li>ParserASA:</b> Este ASDR recorre las producciones de manera recursiva y va retornando tipos de dato Expression y Statement que van formando un Árbol de Sintaxis Abstracta. El árbol se imprime si la variable <em>debug</em> es verdadera</li>
 </ol>
 
-Todos los analizadores sintácticos analizan basados en la gramática proporcionada por el profesor:
+Todos los analizadores sintácticos analizan basados en la gramática proporcionada por el profesor
