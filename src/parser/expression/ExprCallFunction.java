@@ -23,9 +23,9 @@ public class ExprCallFunction extends Expression{
     public void imprimir(int nivel, ArrayList<Boolean> lista){
         // NAME
         if(arguments.isEmpty()){
-            lista.add(true);
-        } else {
             lista.add(false);
+        } else {
+            lista.add(true);
         }
         for(int j=0; j<(lista.size()); j++){
             if(j == lista.size()-1){
@@ -68,7 +68,7 @@ public class ExprCallFunction extends Expression{
                     }
                 }
             }
-            System.out.print(Program.getNombreExpression(e)+"\n");System.out.print("\033[0m");
+            System.out.print("\033[96m"+Program.getNombreExpression(e)+"\n");System.out.print("\033[0m");
             e.imprimir(nivel+1, lista);
             lista.remove(lista.size()-1);
         }

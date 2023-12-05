@@ -670,10 +670,10 @@ public class ParserASA implements Parser{
         || pre == TipoToken.TRUE || pre == TipoToken.FALSE || pre == TipoToken.NULL || pre == TipoToken.NUMBER || pre == TipoToken.STRING || pre == TipoToken.IDENTIFIER || pre == TipoToken.LEFT_PAREN){
             Expression expr = EXPRESSION();
             lista.add(expr);
-            List<Expression> args = ARGUMENTS(lista);
-            for (Expression ex : args) {
+            /*List<Expression> args = */return ARGUMENTS(lista);
+            /*for (Expression ex : args) {
                 lista.add(ex);
-            }
+            }*/
         }
         return lista;
     }

@@ -12,3 +12,5 @@ print "Fin";
 for(;;)
 	print "Hola";
 
+function(arg1, arg2, arg3);
+

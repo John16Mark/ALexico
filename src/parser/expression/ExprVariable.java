@@ -18,7 +18,7 @@ public class ExprVariable extends Expression {
     @Override
     public void imprimir(int nivel, ArrayList<Boolean> lista){
         lista.add(false);
-        for(int j=0; j<(lista.size()); j++){
+        for(int j=0; j<lista.size(); j++){
             if(j == lista.size()-1){
                 System.out.print(" └─");
             } else {
