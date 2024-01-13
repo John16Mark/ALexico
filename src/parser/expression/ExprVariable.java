@@ -16,11 +16,10 @@ public class ExprVariable extends Expression {
     @Override
     public Object solve(TablaSimbolos ts) {
         Object valor = ts.obtener(name.getLexema());
-        if(valor instanceof StmtFunction) {
-            throw new RuntimeException("\033[31mFaltan los argumentos de la función '" + ((StmtFunction)valor).name.getLexema() + "'.\033[0m");
-        } else {
-            return valor;
+        if(ts.existeFuncion(name.getLexema())) {
+            valor = ts.obtenerFuncion(name.getLexema());
         }
+            return valor;
     }
 
     public Token getName(){

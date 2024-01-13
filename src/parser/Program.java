@@ -112,6 +112,9 @@ public class Program {
         if(e instanceof ExprVariable){
             return "ExprVariable";
         }
+        if(e == null){
+            return "\033[31mnull\033[0m";
+        }
         return "\033[91mDESCONOCIDO\033[0m";
     }
 }

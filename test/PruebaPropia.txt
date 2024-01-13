@@ -9,6 +9,7 @@ var apellido = "Pérez";
 	nombre = "Pedro";
 	print nombre+" "+apellido;
 
+	return 2+1;
 	print " ";
 	for(var i=0; i<5; i=i+1){
 		print i+1;

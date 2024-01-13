@@ -1,8 +1,24 @@
 var a = 35;
 var b = 34.5;
 
-fun imprimir() {
-	print "Hola";
+fun imprimir(c, d) {
+	print c+" + "+d+" = "+(c+d);
+	return;
+	print "No debería imprimirse";
 }
-imprimir();
+
+imprimir(a,b);
+imprimir(20,10);
+imprimir("Hola a ","todos.");
+print " ";
+
+print "SUMA: "+suma(a,b);
+print "SUMA: "+suma(10,20);
+print "SUMA: "+suma(0.5,0.3);
+print "SUMA: "+suma("hola ","crayola");
+
 print "Fin";
+
+fun suma(c,d) {
+	return c+d;
+}

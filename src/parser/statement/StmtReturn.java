@@ -2,14 +2,20 @@ package parser.statement;
 
 import java.util.ArrayList;
 
+import interprete.TablaSimbolos;
 import parser.Program;
 import parser.expression.Expression;
 
 public class StmtReturn extends Statement {
-    final Expression value;
+    public final Expression value;
 
     public StmtReturn(Expression value) {
         this.value = value;
+    }
+
+    public void execute(TablaSimbolos ts, String funcion) {
+        if(value != null)
+            ts.asignar(funcion, value.solve(ts));
     }
 
     @Override
@@ -27,8 +33,11 @@ public class StmtReturn extends Statement {
             }
         }
         System.out.print(Program.getNombreExpression(value)+"\n");System.out.print("\033[0m");
-        value.imprimir(nivel+1, lista);
+        if(value != null) {
+            value.imprimir(nivel+1, lista);
+        } else {
 
+        }
         lista.remove(lista.size()-1);
     }
 }

@@ -25,7 +25,7 @@ public class ExprBinary extends Expression{
         TipoToken op = operator.getTipo();
 
         if(valueLeft == null || valueRight == null) {
-            throw new RuntimeException("\033[31mOperación indefinida.\033[0m");
+            throw new RuntimeException("\033[31mOperación indefinida para valor null.\033[0m");
         }
         if(valueLeft instanceof Boolean || valueRight instanceof Boolean) {
             throw new RuntimeException("\033[31mOperadores incompatibles para tipo Boolean.\033[0m");
@@ -34,7 +34,7 @@ public class ExprBinary extends Expression{
             if(valueLeft instanceof Number && valueRight instanceof Number) {
                 return toNumber(valueLeft) + toNumber(valueRight);
             } else if((valueLeft instanceof Number && valueRight instanceof String) || (valueLeft instanceof String && valueRight instanceof Number) || (valueLeft instanceof String && valueRight instanceof String)) {
-                return ((String)valueLeft)+((String)valueRight);
+                return (valueLeft.toString())+(valueRight.toString());
             }
         } else if(op == TipoToken.MINUS) {
             if(valueLeft instanceof Number && valueRight instanceof Number) {
@@ -55,7 +55,7 @@ public class ExprBinary extends Expression{
                 throw new RuntimeException("\033[31mOperador incompatible para tipo String: '/'\033[0m");
             }
         }
-        throw new RuntimeException("\033[31mOperación indefinida.\033[0m");
+        throw new RuntimeException("\033[31mOperación indefinida. Entre: "+valueLeft.getClass()+" y "+valueRight.getClass()+"\033[0m");
     }
 
     @Override

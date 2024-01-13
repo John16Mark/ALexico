@@ -19,7 +19,24 @@ public class StmtBlock extends Statement{
     public void execute(TablaSimbolos ts) {
         TablaSimbolos ts2 = new TablaSimbolos(ts);
         for (Statement statement : statements) {
-            statement.execute(ts2);
+            if(statement instanceof StmtReturn) {
+                ((StmtReturn)statement).value.solve(ts2);
+                return;
+            } else {
+                statement.execute(ts2);
+            }
+        }
+    }
+
+    public void execute(TablaSimbolos ts, String funcion) {
+        TablaSimbolos ts2 = new TablaSimbolos(ts);
+        for (Statement statement : statements) {
+            if(statement instanceof StmtReturn) {
+                ((StmtReturn)statement).execute(ts2, funcion);
+                return;
+            } else {
+                statement.execute(ts2);
+            }
         }
     }
 

@@ -5,17 +5,29 @@ import token.Token;
 import java.util.ArrayList;
 import java.util.List;
 
+import interprete.TablaSimbolos;
 import parser.Program;
 
 public class StmtFunction extends Statement {
     public final Token name;
-    final List<Token> params;
-    final StmtBlock body;
+    public final List<Token> params;
+    public final StmtBlock body;
 
     public StmtFunction(Token name, List<Token> params, StmtBlock body) {
         this.name = name;
         this.params = params;
         this.body = body;
+    }
+
+    @Override
+    public void execute(TablaSimbolos ts) {
+        String id = name.getLexema();
+
+        if(ts.existeIdentificador(id)) {
+            throw new RuntimeException("\033[31mIdentificador '" + id + "' ya definido.\033[0m");
+        } 
+        
+        ts.asignar(id, this);
     }
 
     @Override

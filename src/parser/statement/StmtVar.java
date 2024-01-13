@@ -19,10 +19,16 @@ public class StmtVar extends Statement {
 
     @Override
     public void execute(TablaSimbolos ts) {
+        String id = name.getLexema();
+
+        if(ts.existeIdentificador(id)) {
+            throw new RuntimeException("\033[31mIdentificador '" + id + "' ya definido.\033[0m");
+        } 
+
         if(initializer == null) {
-            ts.add(name.getLexema(), null);
+            ts.asignar(id, null);
         } else {
-            ts.add(name.getLexema(), initializer.solve(ts));
+            ts.asignar(id, initializer.solve(ts));
         }
     }
 
