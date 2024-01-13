@@ -23,7 +23,6 @@ public class Interprete {
                 statement.execute(program.tablaGlobal);
             }
         }
-        System.out.println();
     }
 
     public static void clearScreen() {

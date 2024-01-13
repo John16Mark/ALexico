@@ -15,7 +15,7 @@ public class StmtPrint extends Statement {
 
     @Override
     public void execute(TablaSimbolos ts) {
-        System.out.print(expression.solve(ts));
+        System.out.println(expression.solve(ts));
     }
 
     @Override

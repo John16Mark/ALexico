@@ -4,6 +4,7 @@ import java.util.ArrayList;
 //import javax.swing.plaf.nimbus.State;
 import java.util.List;
 
+import interprete.TablaSimbolos;
 import parser.Program;
 
 public class StmtBlock extends Statement{
@@ -14,6 +15,14 @@ public class StmtBlock extends Statement{
         this.statements = statements;
     }
     
+    @Override
+    public void execute(TablaSimbolos ts) {
+        TablaSimbolos ts2 = new TablaSimbolos(ts);
+        for (Statement statement : statements) {
+            statement.execute(ts2);
+        }
+    }
+
     @Override
     public void imprimir(int nivel, ArrayList<Boolean> lista){
         for (int j=0; j<statements.size(); j++) {

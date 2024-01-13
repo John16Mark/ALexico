@@ -2,6 +2,7 @@ package parser.expression;
 
 import java.util.ArrayList;
 
+import interprete.TablaSimbolos;
 import parser.Program;
 
 public class ExprGrouping extends Expression {
@@ -9,6 +10,11 @@ public class ExprGrouping extends Expression {
 
     public ExprGrouping(Expression expression) {
         this.expression = expression;
+    }
+
+    @Override
+    public Object solve(TablaSimbolos ts) {
+        return expression.solve(ts);
     }
 
     @Override

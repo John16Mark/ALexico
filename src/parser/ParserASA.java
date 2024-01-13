@@ -611,7 +611,6 @@ public class ParserASA implements Parser{
         } else if(preanalisis.getTipo() == TipoToken.LEFT_PAREN){
             match(TipoToken.LEFT_PAREN);
             Expression expr = EXPRESSION();
-            // Tiene que ser cachado aquello que retorna
             match(TipoToken.RIGHT_PAREN);
             return new ExprGrouping(expr);
         } else {
@@ -685,10 +684,7 @@ public class ParserASA implements Parser{
         || pre == TipoToken.TRUE || pre == TipoToken.FALSE || pre == TipoToken.NULL || pre == TipoToken.NUMBER || pre == TipoToken.STRING || pre == TipoToken.IDENTIFIER || pre == TipoToken.LEFT_PAREN){
             Expression expr = EXPRESSION();
             lista.add(expr);
-            /*List<Expression> args = */return ARGUMENTS(lista);
-            /*for (Expression ex : args) {
-                lista.add(ex);
-            }*/
+            return ARGUMENTS(lista);
         }
         return lista;
     }

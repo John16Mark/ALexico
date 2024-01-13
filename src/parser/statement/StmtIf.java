@@ -2,6 +2,7 @@ package parser.statement;
 
 import java.util.ArrayList;
 
+import interprete.TablaSimbolos;
 import parser.Program;
 import parser.expression.Expression;
 
@@ -15,6 +16,15 @@ public class StmtIf extends Statement {
         this.condition = condition;
         this.thenBranch = thenBranch;
         this.elseBranch = elseBranch;
+    }
+
+    @Override
+    public void execute(TablaSimbolos ts) {
+        if((Boolean)condition.solve(ts)) {
+            thenBranch.execute(ts);
+        } else {
+            elseBranch.execute(ts);
+        }
     }
 
     @Override

@@ -22,6 +22,7 @@ public class ExprBinary extends Expression{
     public Object solve(TablaSimbolos ts) {
         Object valueLeft = left.solve(ts);
         Object valueRight = right.solve(ts);
+        TipoToken op = operator.getTipo();
 
         if(valueLeft == null || valueRight == null) {
             throw new RuntimeException("\033[31mOperación indefinida.\033[0m");
@@ -29,36 +30,32 @@ public class ExprBinary extends Expression{
         if(valueLeft instanceof Boolean || valueRight instanceof Boolean) {
             throw new RuntimeException("\033[31mOperadores incompatibles para tipo Boolean.\033[0m");
         }
-        if(operator.getTipo() == TipoToken.PLUS) {
+        if(op == TipoToken.PLUS) {
             if(valueLeft instanceof Number && valueRight instanceof Number) {
                 return toNumber(valueLeft) + toNumber(valueRight);
             } else if((valueLeft instanceof Number && valueRight instanceof String) || (valueLeft instanceof String && valueRight instanceof Number) || (valueLeft instanceof String && valueRight instanceof String)) {
-                return valueLeft.toString()+valueRight.toString();
+                return ((String)valueLeft)+((String)valueRight);
             }
-        } else if(operator.getTipo() == TipoToken.MINUS) {
+        } else if(op == TipoToken.MINUS) {
             if(valueLeft instanceof Number && valueRight instanceof Number) {
                 return toNumber(valueLeft) - toNumber(valueRight);
             } else if(valueLeft instanceof String || valueRight instanceof String) {
                 throw new RuntimeException("\033[31mOperador incompatible para tipo String: '+'\033[0m");
             }
-        } else if(operator.getTipo() == TipoToken.STAR) {
+        } else if(op == TipoToken.STAR) {
             if(valueLeft instanceof Number && valueRight instanceof Number) {
                 return toNumber(valueLeft) * toNumber(valueRight);
             } else if(valueLeft instanceof String || valueRight instanceof String) {
                 throw new RuntimeException("\033[31mOperador incompatible para tipo String: '*'\033[0m");
             }
-        } else if(operator.getTipo() == TipoToken.SLASH) {
+        } else if(op == TipoToken.SLASH) {
             if(valueLeft instanceof Number && valueRight instanceof Number) {
                 return toNumber(valueLeft) / toNumber(valueRight);
             } else if(valueLeft instanceof String || valueRight instanceof String) {
                 throw new RuntimeException("\033[31mOperador incompatible para tipo String: '/'\033[0m");
             }
         }
-        /*System.out.println(valueLeft);
-        System.out.println(operator);
-        System.out.println(valueRight);*/
         throw new RuntimeException("\033[31mOperación indefinida.\033[0m");
-        
     }
 
     @Override

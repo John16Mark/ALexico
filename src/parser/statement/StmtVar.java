@@ -17,6 +17,7 @@ public class StmtVar extends Statement {
         this.initializer = initializer;
     }
 
+    @Override
     public void execute(TablaSimbolos ts) {
         if(initializer == null) {
             ts.add(name.getLexema(), null);
@@ -24,7 +25,6 @@ public class StmtVar extends Statement {
             ts.add(name.getLexema(), initializer.solve(ts));
         }
     }
-    
 
     @Override
     public void imprimir(int nivel, ArrayList<Boolean> lista){

@@ -1,0 +1,11 @@
+var a = 35;
+var b = 34.5;
+if(a < b){
+    print "Válido";
+}
+else{
+    print "No Valido";
+}
+
+print "Fin";
+

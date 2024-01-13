@@ -1,8 +1,6 @@
 package interprete;
 
-import java.util.Arrays;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public class TablaSimbolos {
@@ -23,7 +21,7 @@ public class TablaSimbolos {
         }
     }
 
-    boolean existeIdentificador(String identificador){
+    public boolean existeIdentificador(String identificador){
         return values.containsKey(identificador);
     }
 
@@ -43,14 +41,16 @@ public class TablaSimbolos {
         throw new RuntimeException("\033[31mVariable no definida '" + identificador + "'.\033[0m");
     }
 
-    void asignar(String identificador, Object valor){
+    public void asignar(String identificador, Object valor){
         values.put(identificador, valor);
     }
 
     public void imprimir() {
-        System.out.println("╔════════════╦══════════════════════════════════╗");
+        System.out.println("╔═══════════════╦══════════════════════════════════╗");
+        System.out.println("║ IDENTIFICADOR ║                VALOR             ║");
+        System.out.println("╠═══════════════╬══════════════════════════════════╣");
         for (Map.Entry<String, Object> entrada : values.entrySet()) {
-            System.out.print("║"+String.format("%-12s",entrada.getKey())+"║");
+            System.out.print("║"+String.format("%-15s",entrada.getKey())+"║");
             String valor;
             if(entrada.getValue() == null) {
                 valor = "NULL";
@@ -67,6 +67,6 @@ public class TablaSimbolos {
             } 
             
         }
-        System.out.println("╚════════════╩══════════════════════════════════╝");
+        System.out.println("╚═══════════════╩══════════════════════════════════╝");
     }
 }

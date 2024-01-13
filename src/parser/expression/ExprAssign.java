@@ -2,6 +2,7 @@ package parser.expression;
 
 import java.util.ArrayList;
 
+import interprete.TablaSimbolos;
 import parser.Program;
 import token.Token;
 
@@ -12,6 +13,22 @@ public class ExprAssign extends Expression{
     public ExprAssign(Token name, Expression value) {
         this.name = name;
         this.value = value;
+    }
+
+    @Override
+    public Object solve(TablaSimbolos ts) {
+        TablaSimbolos tabla = ts;
+        Object valor = value.solve(ts);
+
+        while(tabla != null){
+            if(tabla.existeIdentificador(name.getLexema())) {
+                tabla.asignar(name.getLexema(), valor);
+                return valor;
+            } else {
+                tabla = tabla.sigTabla;
+            }
+        }
+        throw new RuntimeException("\033[31mVariable no definida '" + name.getLexema() + "'.\033[0m");
     }
 
     @Override

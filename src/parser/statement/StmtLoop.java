@@ -2,6 +2,7 @@ package parser.statement;
 
 import java.util.ArrayList;
 
+import interprete.TablaSimbolos;
 import parser.Program;
 import parser.expression.Expression;
 
@@ -12,6 +13,13 @@ public class StmtLoop extends Statement {
     public StmtLoop(Expression condition, Statement body) {
         this.condition = condition;
         this.body = body;
+    }
+
+    @Override
+    public void execute(TablaSimbolos ts) {
+        while((Boolean)condition.solve(ts)){
+            body.execute(ts);
+        }
     }
 
     @Override

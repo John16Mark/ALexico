@@ -1,4 +1,16 @@
 var nombre = "Juan";
 var apellido = "Pérez";
 
-print nombre+" "+apellido;
+{
+	var nombre2 = "Miguel";
+	print nombre2+" "+apellido;
+	print nombre+" "+apellido;
+
+	nombre = "Pedro";
+	print nombre+" "+apellido;
+
+	print " ";
+	for(var i=0; i<5; i=i+1){
+		print i+1;
+	}
+}
