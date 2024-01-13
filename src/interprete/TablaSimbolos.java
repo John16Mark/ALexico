@@ -2,9 +2,7 @@ package interprete;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.function.Function;
 
-import parser.statement.Statement;
 import parser.statement.StmtFunction;
 
 public class TablaSimbolos {
@@ -77,7 +75,6 @@ public class TablaSimbolos {
                 functions.put(id, (StmtFunction)valor);
                 values.put(id, null);
             }
-            //throw new RuntimeException("\033[31mError al asignar: Variable no definida '" + id + "'.\033[0m");
         } else {
             if(values.containsKey(id)) {
                 values.put(id, valor);

@@ -3,7 +3,6 @@ package parser.expression;
 import java.util.ArrayList;
 
 import interprete.TablaSimbolos;
-import parser.statement.StmtFunction;
 import token.Token;
 
 public class ExprVariable extends Expression {

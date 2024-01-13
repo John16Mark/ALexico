@@ -7,6 +7,7 @@ import java.util.List;
 import def.Main;
 import parser.expression.*;
 import parser.statement.*;
+import scanner.Funcion;
 import token.TipoToken;
 import token.Token;
 
@@ -109,8 +110,8 @@ public class ParserASA implements Parser{
     // FUN_DECL -> fun FUNCTION
     private Statement FUN_DECL(){
         match(TipoToken.FUN);
-        List<Object> lista = FUNCTION();
-        return new StmtFunction((Token)lista.get(0), (List<Token>)lista.get(1), (StmtBlock)lista.get(2));
+        Funcion funcion = FUNCTION();
+        return new StmtFunction(funcion.nombre, funcion.parametros, funcion.body);
     }
 
     // VAR_DECL -> var id VAR_INT ;
@@ -627,14 +628,14 @@ public class ParserASA implements Parser{
     *************************************************************************************************/
 
     // FUNCTION ->  id ( PARAMETERS_OPC ) BLOCK
-    private List<Object> FUNCTION(){
+    private Funcion FUNCTION(){
         match(TipoToken.IDENTIFIER);
         Token id = previous();
         match(TipoToken.LEFT_PAREN);
         List<Token> params = PARAMETERS_OPC(new ArrayList<Token>());
         match(TipoToken.RIGHT_PAREN);
         StmtBlock body = BLOCK();
-        List<Object> lista = Arrays.asList(id, params, body);
+        Funcion lista = new Funcion(id, params, body);
         return lista;
     }
 

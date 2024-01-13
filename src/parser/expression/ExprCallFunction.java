@@ -6,7 +6,6 @@ import java.util.List;
 import interprete.TablaSimbolos;
 import parser.Program;
 import parser.statement.StmtFunction;
-import token.Token;
 
 public class ExprCallFunction extends Expression{
     final Expression callee;
