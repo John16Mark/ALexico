@@ -6,6 +6,7 @@ if(a < b){
 else{
     print "No Valido";
 }
+print -b;
 
 print "Fin";
 

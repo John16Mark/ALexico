@@ -60,6 +60,10 @@ public class ParserASA implements Parser{
             if(statement instanceof StmtVar) {
                 ((StmtVar)statement).execute(tablaGlobal);
             }
+            if(statement instanceof StmtFunction) {
+                
+                tablaGlobal.add(((StmtFunction)statement).name.getLexema(), statement);
+            }
         }
         return new Program(stmts, tablaGlobal);
     }

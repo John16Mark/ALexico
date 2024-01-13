@@ -3,6 +3,8 @@ package interprete;
 import java.util.HashMap;
 import java.util.Map;
 
+import parser.statement.Statement;
+
 public class TablaSimbolos {
 
     private final Map<String, Object> values = new HashMap<>();
@@ -14,7 +16,7 @@ public class TablaSimbolos {
 
     public boolean add(String id, Object valor){
         if(existeIdentificador(id)) {
-            return false;
+            throw new RuntimeException("\033[31mIdentificador '" + id + "' ya definido.\033[0m");
         } else {
             values.put(id, valor);
             return true;
@@ -22,27 +24,38 @@ public class TablaSimbolos {
     }
 
     public boolean existeIdentificador(String identificador){
-        return values.containsKey(identificador);
-    }
-
-    /*Object obtener(String identificador) {
-        if (values.containsKey(identificador)) {
-            return values.get(identificador);
-        }
-        throw new RuntimeException("Variable no definida '" + identificador + "'.");
-    }*/
-
-    public Object obtener(String identificador) {
-        if (existeIdentificador(identificador)) {
-            return values.get(identificador);
+        if(values.containsKey(identificador)) {
+            return true;
         } else if (sigTabla != null) {
-            return sigTabla.obtener(identificador);
+            return sigTabla.existeIdentificador(identificador);
+        } else {
+            return false;
         }
-        throw new RuntimeException("\033[31mVariable no definida '" + identificador + "'.\033[0m");
     }
 
-    public void asignar(String identificador, Object valor){
-        values.put(identificador, valor);
+    public Object obtener(String id) {
+        if (!existeIdentificador(id)) {
+            throw new RuntimeException("\033[31mError al obtener: Variable no definida '" + id + "'.\033[0m");
+        } else {
+            if(values.containsKey(id)) {
+                return values.get(id);
+            } else {
+                return sigTabla.obtener(id);
+            }
+        }
+    }
+
+    public void asignar(String id, Object valor){
+        if (!existeIdentificador(id)) {
+            throw new RuntimeException("\033[31mError al asignar: Variable no definida '" + id + "'.\033[0m");
+        } else {
+            if(values.containsKey(id)) {
+                values.put(id, valor);
+            } else {
+                sigTabla.asignar(id, valor);
+            }
+        }
+        //values.put(identificador, valor);
     }
 
     public void imprimir() {
@@ -59,6 +72,9 @@ public class TablaSimbolos {
                 if (entrada.getValue() instanceof String) {
                     valor = "\"" + entrada.getValue() + "\"";
                     System.out.println(String.format("\033[96m%-34s\033[0m",valor)+"║");
+                } else if(entrada.getValue() instanceof Statement) {
+                    valor = "FUNCIÓN";
+                    System.out.println(String.format("\033[95m%-34s\033[0m",valor)+"║");
                 } else {
                     valor = entrada.getValue().toString();
                     System.out.println(String.format("%-34s\033[0m",valor)+"║");

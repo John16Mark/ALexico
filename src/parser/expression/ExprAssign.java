@@ -20,13 +20,9 @@ public class ExprAssign extends Expression{
         TablaSimbolos tabla = ts;
         Object valor = value.solve(ts);
 
-        while(tabla != null){
-            if(tabla.existeIdentificador(name.getLexema())) {
-                tabla.asignar(name.getLexema(), valor);
-                return valor;
-            } else {
-                tabla = tabla.sigTabla;
-            }
+        if(tabla.existeIdentificador(name.getLexema())) {
+            tabla.asignar(name.getLexema(), valor);
+            return valor;
         }
         throw new RuntimeException("\033[31mVariable no definida '" + name.getLexema() + "'.\033[0m");
     }

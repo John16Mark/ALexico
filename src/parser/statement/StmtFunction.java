@@ -8,7 +8,7 @@ import java.util.List;
 import parser.Program;
 
 public class StmtFunction extends Statement {
-    final Token name;
+    public final Token name;
     final List<Token> params;
     final StmtBlock body;
 

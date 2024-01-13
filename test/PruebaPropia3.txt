@@ -1,0 +1,8 @@
+var a = 35;
+var b = 34.5;
+
+fun imprimir() {
+	print "Hola";
+}
+imprimir();
+print "Fin";
