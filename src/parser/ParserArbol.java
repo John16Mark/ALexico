@@ -720,4 +720,9 @@ public class ParserArbol implements Parser{
     private Token previous() {
         return this.tokens.get(i - 1);
     }
+
+    @Override
+    public Program getProgram() {
+        throw new UnsupportedOperationException("Unimplemented method 'getProgram'");
+    }
 }

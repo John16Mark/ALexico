@@ -3,15 +3,22 @@ package parser;
 import java.util.ArrayList;
 import java.util.List;
 
+import interprete.TablaSimbolos;
 import parser.expression.*;
 import parser.statement.*;
 
 public class Program {
     List<Statement> statements;
+    public TablaSimbolos tablaGlobal;
     public final static String nombre = "Program";
 
-    public Program(List<Statement> lista){
+    public Program(List<Statement> lista, TablaSimbolos tg){
         this.statements = lista;
+        this.tablaGlobal = tg;
+    }
+
+    public List<Statement> getList() {
+        return statements;
     }
 
     public void imprimir(int nivel, ArrayList<Boolean> lista){

@@ -703,4 +703,8 @@ public class ParserASDR implements Parser{
         Main.reportar(linea, mensaje);
     }
 
+    @Override
+    public Program getProgram() {
+        throw new UnsupportedOperationException("Unimplemented method 'getProgram'");
+    }
 }

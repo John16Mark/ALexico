@@ -4,17 +4,27 @@ import token.Token;
 
 import java.util.ArrayList;
 
+import interprete.TablaSimbolos;
 import parser.Program;
 import parser.expression.Expression;
 
 public class StmtVar extends Statement {
-    final Token name;
-    final Expression initializer;
+    public final Token name;
+    public final Expression initializer;
 
     public StmtVar(Token name, Expression initializer) {
         this.name = name;
         this.initializer = initializer;
     }
+
+    public void execute(TablaSimbolos ts) {
+        if(initializer == null) {
+            ts.add(name.getLexema(), null);
+        } else {
+            ts.add(name.getLexema(), initializer.solve(ts));
+        }
+    }
+    
 
     @Override
     public void imprimir(int nivel, ArrayList<Boolean> lista){

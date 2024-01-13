@@ -2,8 +2,10 @@
 setlocal enabledelayedexpansion
 
 cls
+CALL compilar.bat
+
 REM Establece el directorio de pruebas
-set "dir=./pruebas/"
+set "dir=./test/"
 
 REM Itera sobre los archivos en el directorio
 for %%f in (%dir%*.txt) do (

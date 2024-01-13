@@ -2,6 +2,7 @@ package parser.expression;
 
 import java.util.ArrayList;
 
+import interprete.TablaSimbolos;
 import token.Token;
 
 public class ExprVariable extends Expression {
@@ -9,6 +10,11 @@ public class ExprVariable extends Expression {
 
     public ExprVariable(Token name) {
         this.name = name;
+    }
+
+    @Override
+    public Object solve(TablaSimbolos ts) {
+        return ts.obtener(name.getLexema());
     }
 
     public Token getName(){

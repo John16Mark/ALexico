@@ -7,6 +7,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.List;
 
+import interprete.Interprete;
 import token.Token;
 import parser.*;
 import scanner.Scanner;
@@ -64,6 +65,8 @@ public class Main {
             
             Parser parser = new ParserASA(tokens);
             parser.parse();
+            Interprete interprete = new Interprete(parser.getProgram());
+            interprete.interpretar();
         }
         catch (Exception ex){
             ex.printStackTrace();

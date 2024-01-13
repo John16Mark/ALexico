@@ -2,6 +2,7 @@ package parser.statement;
 
 import java.util.ArrayList;
 
+import interprete.TablaSimbolos;
 import parser.Program;
 import parser.expression.Expression;
 
@@ -10,6 +11,11 @@ public class StmtPrint extends Statement {
 
     public StmtPrint(Expression expression) {
         this.expression = expression;
+    }
+
+    @Override
+    public void execute(TablaSimbolos ts) {
+        System.out.print(expression.solve(ts));
     }
 
     @Override

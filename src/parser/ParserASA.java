@@ -10,12 +10,16 @@ import parser.statement.*;
 import token.TipoToken;
 import token.Token;
 
+import interprete.*;
+
 public class ParserASA implements Parser{
 
     private int i = 0;
     private boolean hayErrores = false;
     private Token preanalisis;
     private final List<Token> tokens;
+    TablaSimbolos tablaGlobal = new TablaSimbolos(null);
+    Program p;
 
     public ParserASA(List<Token> tokens){
         this.tokens = tokens;
@@ -25,7 +29,7 @@ public class ParserASA implements Parser{
     @Override
     public boolean parse() {
         // Inicia el analizador léxico
-        Program p = PROGRAM();
+        p = PROGRAM();
         ArrayList<Boolean> lista = new ArrayList<>();
         if(preanalisis.getTipo() == TipoToken.EOF && !hayErrores){
             if(def.Main.debug){
@@ -35,6 +39,8 @@ public class ParserASA implements Parser{
             if(def.Main.debug){
                 System.out.println("\n\033[92m  Árbol de Sintaxis Abstracta\033[0m");
                 p.imprimir(0, lista);
+                System.out.println("\n\033[92m  Tabla de Símbolos Global\033[0m");
+                tablaGlobal.imprimir();
             }
             return  true;
         }else {
@@ -43,10 +49,19 @@ public class ParserASA implements Parser{
         return false;
     }
 
+    public Program getProgram() {
+        return p;
+    }
+
     // PROGRAM -> DECLARATION
     private Program PROGRAM(){
         List<Statement> stmts = DECLARATION(new ArrayList<Statement>());
-        return new Program(stmts);
+        for (Statement statement : stmts) {
+            if(statement instanceof StmtVar) {
+                ((StmtVar)statement).execute(tablaGlobal);
+            }
+        }
+        return new Program(stmts, tablaGlobal);
     }
 
     /*************************************************************************************************
