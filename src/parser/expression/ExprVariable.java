@@ -14,11 +14,13 @@ public class ExprVariable extends Expression {
 
     @Override
     public Object solve(TablaSimbolos ts) {
-        Object valor = ts.obtener(name.getLexema());
+        Object valor;
         if(ts.existeFuncion(name.getLexema())) {
             valor = ts.obtenerFuncion(name.getLexema());
+        } else {
+            valor = ts.obtener(name.getLexema());
         }
-            return valor;
+        return valor;
     }
 
     public Token getName(){

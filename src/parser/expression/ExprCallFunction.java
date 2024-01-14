@@ -22,7 +22,7 @@ public class ExprCallFunction extends Expression{
     public Object solve(TablaSimbolos ts) {
         String id;
         Object resultado = callee.solve(ts);
-        //if(resultado instanceof StmtFunction) {
+        
         id = ((StmtFunction)resultado).name.getLexema();
         if(!ts.existeFuncion(id)) {
             throw new RuntimeException("\033[31mFunción '" + id + "' no definida.\033[0m");
@@ -33,7 +33,6 @@ public class ExprCallFunction extends Expression{
                 throw new RuntimeException("\033[31mNúmero de argumentos inválida para función '"+id+"'.\033[0m");
             }
             for (int i=0; i<arguments.size(); i++) {
-                //System.out.println("Se asignó: "+funcion.params.get(i).getLexema()+" -> "+arguments.get(i));
                 ts2.asignar(funcion.params.get(i).getLexema(), arguments.get(i).solve(ts));
             }
             funcion.body.execute(ts2, id);

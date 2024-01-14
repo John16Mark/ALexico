@@ -1,4 +1,4 @@
-package scanner;
+package parser;
 
 import java.util.List;
 

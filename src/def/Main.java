@@ -15,6 +15,7 @@ import scanner.Scanner;
 public class Main {
 
 	public static boolean existenErrores = false;
+    // activar esta variable para ver lista de tokens y árbol
     public static boolean debug = true;
 
     public static void main(String[] args) throws IOException {
@@ -33,9 +34,6 @@ public class Main {
     private static void ejecutarArchivo(String path) throws IOException {
         byte[] bytes = Files.readAllBytes(Paths.get(path));
         ejecutar(new String(bytes, Charset.defaultCharset()));
-
-        // Se indica que existe un error
-        //if(existenErrores) System.exit(65);
     }
 
     private static void ejecutarPrompt() throws IOException {
@@ -65,8 +63,11 @@ public class Main {
             
             Parser parser = new ParserASA(tokens);
             parser.parse();
-            Interprete interprete = new Interprete(parser.getProgram());
-            interprete.interpretar();
+
+            if(parser instanceof ParserASA) {
+                Interprete interprete = new Interprete(parser.getProgram());
+                interprete.interpretar();
+            }
         }
         catch (Exception ex){
             ex.printStackTrace();
@@ -98,9 +99,5 @@ public class Main {
         existenErrores = true;
         System.exit(1);
     }
-
-    /*private static void presentacion(){
-        
-    }*/
 
 }

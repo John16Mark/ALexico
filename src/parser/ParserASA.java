@@ -7,7 +7,6 @@ import java.util.List;
 import def.Main;
 import parser.expression.*;
 import parser.statement.*;
-import scanner.Funcion;
 import token.TipoToken;
 import token.Token;
 
@@ -45,7 +44,7 @@ public class ParserASA implements Parser{
             }
             return  true;
         }else {
-            System.out.println("\033[91mSe encontraron errores\033[0m");
+            System.out.println("\033[91mSe encontraron errores.\033[0m");
         }
         return false;
     }

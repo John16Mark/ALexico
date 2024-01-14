@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import interprete.TablaSimbolos;
 import parser.Program;
+import parser.statement.StmtFunction;
 import token.TipoToken;
 import token.Token;
 
@@ -24,6 +25,12 @@ public class ExprBinary extends Expression{
         Object valueRight = right.solve(ts);
         TipoToken op = operator.getTipo();
 
+        if(valueLeft instanceof StmtFunction) {
+            throw new RuntimeException("\033[31mFaltan argumentos para la función '"+((StmtFunction)valueLeft).name.getLexema()+"'\033[0m");
+        }
+        if(valueRight instanceof StmtFunction) {
+            throw new RuntimeException("\033[31mFaltan argumentos para la función '"+((StmtFunction)valueRight).name.getLexema()+"'\033[0m");
+        }
         if(valueLeft == null || valueRight == null) {
             throw new RuntimeException("\033[31mOperación indefinida para valor null.\033[0m");
         }

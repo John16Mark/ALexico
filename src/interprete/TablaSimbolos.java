@@ -15,15 +15,6 @@ public class TablaSimbolos {
         this.sigTabla = sig;
     }
 
-    /*public boolean add(String id, Object valor){
-        if(existeIdentificador(id)) {
-            throw new RuntimeException("\033[31mIdentificador '" + id + "' ya definido.\033[0m");
-        } else {
-            values.put(id, valor);
-            return true;
-        }
-    }*/
-
     public boolean existeIdentificador(String identificador){
         if(values.containsKey(identificador)) {
             return true;
@@ -70,11 +61,13 @@ public class TablaSimbolos {
 
     public void asignar(String id, Object valor){
         if (!existeIdentificador(id)) {
-            values.put(id, valor);
+            Object value = valor;
             if(valor instanceof StmtFunction) {
                 functions.put(id, (StmtFunction)valor);
                 values.put(id, null);
+                value = null;
             }
+            values.put(id, value);
         } else {
             if(values.containsKey(id)) {
                 values.put(id, valor);
